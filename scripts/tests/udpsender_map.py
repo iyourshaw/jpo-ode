@@ -1,6 +1,7 @@
 import socket
 import time
 import os
+import random
 
 # Currently set to oim-dev environment's ODE
 UDP_IP = os.getenv('DOCKER_HOST_IP')
@@ -14,6 +15,9 @@ print("UDP target port:", UDP_PORT)
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # UDP
 
 while True:
-  time.sleep(5)
-  print("sending SRM every 5 second")
+  interval = 1
+  jitter = 0.9
+  sleepTime = random.uniform(interval - jitter, interval + jitter)
+  time.sleep(sleepTime)
+  print(f"sending MAP every {interval} +/- {jitter} seconds")
   sock.sendto(bytes.fromhex(MESSAGE), (UDP_IP, UDP_PORT))
