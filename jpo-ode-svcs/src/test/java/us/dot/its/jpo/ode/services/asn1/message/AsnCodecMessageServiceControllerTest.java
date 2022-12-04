@@ -2,7 +2,7 @@ package us.dot.its.jpo.ode.services.asn1.message;
 
 import static org.junit.Assert.assertNotNull;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import us.dot.its.jpo.ode.OdeProperties;
 	

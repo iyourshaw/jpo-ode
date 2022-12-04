@@ -1,8 +1,8 @@
 package us.dot.its.jpo.ode.plugin.j2735;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertEquals;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 public class J2735ConnectionTest {
 
@@ -23,8 +23,8 @@ public class J2735ConnectionTest {
 		remoteIntersection.setRegion(10);
 		connection.setRemoteIntersection(remoteIntersection);
 		
-		assertEquals(remoteIntersection.getId(), 10);
-		assertEquals(remoteIntersection.getRegion(), 10);
-		assertEquals(connection.getSignalGroup(), 10);
+		assertEquals(remoteIntersection.getId().intValue(), 10);
+		assertEquals(remoteIntersection.getRegion().intValue(), 10);
+		assertEquals(connection.getSignalGroup().intValue(), 10);
 	}
 }

@@ -1,8 +1,8 @@
 package us.dot.its.jpo.ode.plugin.j2735;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertEquals;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 public class J2735ConnectionLaneTest {
 
@@ -10,7 +10,7 @@ public class J2735ConnectionLaneTest {
 	public void testGettersSetters() {
 		J2735ConnectingLane connectionLane = new J2735ConnectingLane();
 		connectionLane.setLane(10);
-		assertEquals(connectionLane.getLane(), 10);
+		assertEquals(connectionLane.getLane().intValue(), 10);
 
 		J2735BitString maneuver = new J2735BitString();
 

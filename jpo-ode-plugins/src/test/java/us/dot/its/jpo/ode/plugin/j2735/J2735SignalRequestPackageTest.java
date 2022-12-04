@@ -1,8 +1,8 @@
 package us.dot.its.jpo.ode.plugin.j2735;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertEquals;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 public class J2735SignalRequestPackageTest {
 
@@ -13,15 +13,15 @@ public class J2735SignalRequestPackageTest {
         J2735SignalRequest signalRequest = new J2735SignalRequest();
         signalRequest.setRequestID(5);
         signalRequestPackage.setRequest(signalRequest);
-		assertEquals(signalRequestPackage.getRequest().getRequestID(), 5);
+		assertEquals(signalRequestPackage.getRequest().getRequestID().intValue(), 5);
 
         signalRequestPackage.setMinute(5);
-        assertEquals(signalRequestPackage.getMinute(), 5);
+        assertEquals(signalRequestPackage.getMinute().intValue(), 5);
 
         signalRequestPackage.setSecond(5);
-        assertEquals(signalRequestPackage.getSecond(), 5);
+        assertEquals(signalRequestPackage.getSecond().intValue(), 5);
 
         signalRequestPackage.setDuration(5);
-        assertEquals(signalRequestPackage.getDuration(), 5);
+        assertEquals(signalRequestPackage.getDuration().intValue(), 5);
 	}
 }

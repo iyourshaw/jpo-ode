@@ -1,11 +1,11 @@
 package us.dot.its.jpo.ode.plugin.j2735;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 import java.math.BigDecimal;
 
 import org.codehaus.groovy.runtime.typehandling.BigDecimalMath;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 public class J2735RequestorDescriptionTest {
     
@@ -42,6 +42,6 @@ public class J2735RequestorDescriptionTest {
         assertEquals(requestorDescription.getTransitOccupancy(), J2735TransitVehicleOccupancy.occupancyMed);
 
         requestorDescription.setTransitSchedule(5);
-        assertEquals(requestorDescription.getTransitSchedule(), 5);
+        assertEquals(requestorDescription.getTransitSchedule().intValue(), 5);
 	}
 }

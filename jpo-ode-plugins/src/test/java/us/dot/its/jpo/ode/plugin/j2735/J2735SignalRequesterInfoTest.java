@@ -1,8 +1,8 @@
 package us.dot.its.jpo.ode.plugin.j2735;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertEquals;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 public class J2735SignalRequesterInfoTest {
     
@@ -16,10 +16,10 @@ public class J2735SignalRequesterInfoTest {
         assertEquals(signalRequesterInfo.getId().getEntityID(), "test");
 
         signalRequesterInfo.setRequest(5);
-        assertEquals(signalRequesterInfo.getRequest(), 5);
+        assertEquals(signalRequesterInfo.getRequest().intValue(), 5);
 
         signalRequesterInfo.setSequenceNumber(4);
-        assertEquals(signalRequesterInfo.getSequenceNumber(), 4);
+        assertEquals(signalRequesterInfo.getSequenceNumber().intValue(), 4);
 
         signalRequesterInfo.setRole(J2735BasicVehicleRole.emergency);
         assertEquals(signalRequesterInfo.getRole(), J2735BasicVehicleRole.emergency);

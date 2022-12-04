@@ -1,8 +1,8 @@
 package us.dot.its.jpo.ode.plugin.j2735;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertEquals;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 public class J2735RequestorTypeTest {
     
@@ -20,7 +20,7 @@ public class J2735RequestorTypeTest {
         assertEquals(requestorType.getRequest(), J2735RequestImportanceLevel.requestImportanceLevel1);
 
         requestorType.setIso3883(5);
-        assertEquals(requestorType.getIso3883(), 5);
+        assertEquals(requestorType.getIso3883().intValue(), 5);
 
         requestorType.setHpmsType(J2735VehicleType.car);
         assertEquals(requestorType.getHpmsType(), J2735VehicleType.car);

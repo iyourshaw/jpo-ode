@@ -1,8 +1,8 @@
 package us.dot.its.jpo.ode.plugin.j2735;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertEquals;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 public class J2735VehicleIDTest {
     
@@ -12,6 +12,6 @@ public class J2735VehicleIDTest {
         vehicleId.setEntityID("test");
         vehicleId.setStationID(105L);
         assertEquals(vehicleId.getEntityID(), "test");
-        assertEquals(vehicleId.getStationID(), 105L);
+        assertEquals(vehicleId.getStationID().intValue(), 105L);
 	}
 }
