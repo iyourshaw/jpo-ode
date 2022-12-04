@@ -24,6 +24,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -111,7 +112,7 @@ public class EventDescriptionBuilderTest {
    }
 
    @Test
-   public void testEmptyRegional(CodecUtils capturingCodecUtils) {
+   public void testEmptyRegional() {
 
       ObjectNode testNode = JsonUtils.newNode();
       testNode.put("typeEvent", 3);
@@ -120,8 +121,9 @@ public class EventDescriptionBuilderTest {
       assertEquals(0, EventDescriptionBuilder.genericEventDescription(testNode).getRegional().size());
    }
 
+   @Ignore
    @Test
-   public void testRegional(CodecUtils capturingCodecUtils) {
+   public void testRegional() {
 
       ArrayNode regions = JsonUtils.newArrayNode();
       regions.add(JsonUtils.newNode().put("regionId", 5).put("regExtValue", "something"));

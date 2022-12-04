@@ -17,6 +17,9 @@ package us.dot.its.jpo.ode.plugin.j2735.builders;
 
 import java.math.BigDecimal;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.fasterxml.jackson.databind.JsonNode;
 
 import us.dot.its.jpo.ode.plugin.j2735.J2735BsmCoreData;
@@ -24,6 +27,8 @@ import us.dot.its.jpo.ode.plugin.j2735.OdePosition3D;
 import us.dot.its.jpo.ode.plugin.j2735.J2735TransmissionState;
 
 public class BsmCoreDataBuilder {
+
+    private final static Logger logger = LoggerFactory.getLogger(BsmCoreDataBuilder.class);
     
     private BsmCoreDataBuilder() {
        throw new UnsupportedOperationException();
@@ -31,51 +36,56 @@ public class BsmCoreDataBuilder {
 
     public static J2735BsmCoreData genericBsmCoreData(JsonNode coreData) {
         J2735BsmCoreData genericBsmCoreData = new J2735BsmCoreData();
+        try {
+            
 
-        genericBsmCoreData.setMsgCnt(coreData.get("msgCnt").asInt());
+            genericBsmCoreData.setMsgCnt(coreData.get("msgCnt").asInt());
 
-        genericBsmCoreData.setId(coreData.get("id").asText());
+            genericBsmCoreData.setId(coreData.get("id").asText());
 
-        if (coreData.get("secMark").asInt() != 65535) {
-            genericBsmCoreData.setSecMark(coreData.get("secMark").asInt());
-        } else {
-            genericBsmCoreData.setSecMark(null);
-        }
-
-         genericBsmCoreData.setPosition(new OdePosition3D(LatitudeBuilder.genericLatitude(coreData.get("lat")),
-               LongitudeBuilder.genericLongitude(coreData.get("long")),
-               ElevationBuilder.genericElevation(coreData.get("elev"))));
-
-        genericBsmCoreData.setAccelSet(AccelerationSet4WayBuilder.genericAccelerationSet4Way(coreData.get("accelSet")));
-
-        genericBsmCoreData.setAccuracy(PositionalAccuracyBuilder.genericPositionalAccuracy(coreData.get("accuracy")));
-
-        JsonNode transmission = coreData.get("transmission");
-        if (transmission != null) {
-            J2735TransmissionState enumTransmission; 
-            try {
-                enumTransmission = J2735TransmissionState.valueOf(transmission.fieldNames().next().toUpperCase());
-            } catch (IllegalArgumentException e) {
-                enumTransmission = J2735TransmissionState.UNAVAILABLE;
+            if (coreData.get("secMark").asInt() != 65535) {
+                genericBsmCoreData.setSecMark(coreData.get("secMark").asInt());
+            } else {
+                genericBsmCoreData.setSecMark(null);
             }
-            genericBsmCoreData.setTransmission(enumTransmission);
+
+            genericBsmCoreData.setPosition(new OdePosition3D(LatitudeBuilder.genericLatitude(coreData.get("lat")),
+                LongitudeBuilder.genericLongitude(coreData.get("long")),
+                ElevationBuilder.genericElevation(coreData.get("elev"))));
+
+            genericBsmCoreData.setAccelSet(AccelerationSet4WayBuilder.genericAccelerationSet4Way(coreData.get("accelSet")));
+
+            genericBsmCoreData.setAccuracy(PositionalAccuracyBuilder.genericPositionalAccuracy(coreData.get("accuracy")));
+
+            JsonNode transmission = coreData.get("transmission");
+            if (transmission != null) {
+                J2735TransmissionState enumTransmission; 
+                try {
+                    enumTransmission = J2735TransmissionState.valueOf(transmission.fieldNames().next().toUpperCase());
+                } catch (IllegalArgumentException e) {
+                    enumTransmission = J2735TransmissionState.UNAVAILABLE;
+                }
+                genericBsmCoreData.setTransmission(enumTransmission);
+            }
+
+            // speed is received in units of 0.02 m/s
+            genericBsmCoreData.setSpeed(SpeedOrVelocityBuilder.genericSpeed(coreData.get("speed")));
+
+            JsonNode heading = coreData.get("heading");
+            if (heading != null) {
+                // Heading ::= INTEGER (0..28800)
+                // -- LSB of 0.0125 degrees
+                // -- A range of 0 to 359.9875 degrees
+                genericBsmCoreData.setHeading(HeadingBuilder.genericHeading(heading));
+            }
+
+            genericBsmCoreData.setAngle(steeringAngle(coreData.get("angle")));
+            genericBsmCoreData.setBrakes(BrakeSystemStatusBuilder.genericBrakeSystemStatus(coreData.get("brakes")));
+            genericBsmCoreData.setSize(VehicleSizeBuilder.genericVehicleSize(coreData.get("size")));
+        } catch (Exception ex) {
+            logger.error("Exception in BsmCoreDatabuilder", ex);
+            //throw new RuntimeException(ex);
         }
-
-        // speed is received in units of 0.02 m/s
-        genericBsmCoreData.setSpeed(SpeedOrVelocityBuilder.genericSpeed(coreData.get("speed")));
-
-        JsonNode heading = coreData.get("heading");
-        if (heading != null) {
-            // Heading ::= INTEGER (0..28800)
-            // -- LSB of 0.0125 degrees
-            // -- A range of 0 to 359.9875 degrees
-            genericBsmCoreData.setHeading(HeadingBuilder.genericHeading(heading));
-        }
-
-        genericBsmCoreData.setAngle(steeringAngle(coreData.get("angle")));
-        genericBsmCoreData.setBrakes(BrakeSystemStatusBuilder.genericBrakeSystemStatus(coreData.get("brakes")));
-        genericBsmCoreData.setSize(VehicleSizeBuilder.genericVehicleSize(coreData.get("size")));
-
         return genericBsmCoreData;
     }
 

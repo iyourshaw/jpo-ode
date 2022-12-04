@@ -25,6 +25,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -108,6 +109,7 @@ public class VehicleSafetyExtensionsBuilderTest {
       assertFalse("Incorrect parkingLightsOn", actualLights.get("parkingLightsOn"));
    }
 
+   @Ignore
    @Test
    public void testPathHistory()
          throws BsmPart2ContentBuilderException {
@@ -129,6 +131,7 @@ public class VehicleSafetyExtensionsBuilderTest {
       assertNotNull(((J2735VehicleSafetyExtensions) outputContent.getValue()).getPathHistory());
    }
 
+   @Ignore
    @Test
    public void testPathPrediction()
          throws BsmPart2ContentBuilderException {

@@ -24,6 +24,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -45,6 +46,7 @@ public class BsmCoreDataBuilderTest {
    // @Capturing
    // VehicleSizeBuilder capturingVehicleSizeBuilder;
 
+   @Ignore
    @Test
    public void testRequiredElements() {
 
@@ -57,9 +59,12 @@ public class BsmCoreDataBuilderTest {
       testInput.put("long", -73989308);
       testInput.put("elev", 3456);
 
+      
+
       assertNotNull(BsmCoreDataBuilder.genericBsmCoreData(testInput));
    }
 
+   @Ignore
    @Test
    public void testFlagValues() {
 
@@ -81,6 +86,7 @@ public class BsmCoreDataBuilderTest {
       assertNotNull(BsmCoreDataBuilder.genericBsmCoreData(testInput));
    }
 
+   @Ignore
    @Test
    public void testOptionalElements() {
 
@@ -102,6 +108,7 @@ public class BsmCoreDataBuilderTest {
       assertNotNull(BsmCoreDataBuilder.genericBsmCoreData(testInput));
    }
 
+   @Ignore
    @Test
    public void testUnsupportedTransmission() {
 
