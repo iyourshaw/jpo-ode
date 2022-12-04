@@ -30,8 +30,8 @@ import org.junit.Test;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-import mockit.Capturing;
-import mockit.Expectations;
+// import mockit.Capturing;
+// import mockit.Expectations;
 import us.dot.its.jpo.ode.plugin.j2735.J2735BitString;
 import us.dot.its.jpo.ode.plugin.j2735.J2735BsmPart2Content;
 import us.dot.its.jpo.ode.plugin.j2735.J2735PathHistory;
@@ -109,15 +109,15 @@ public class VehicleSafetyExtensionsBuilderTest {
    }
 
    @Test
-   public void testPathHistory(@Capturing PathHistoryBuilder capturingPathHistoryBuilder)
+   public void testPathHistory()
          throws BsmPart2ContentBuilderException {
 
-      new Expectations() {
-         {
-            PathHistoryBuilder.genericPathHistory((JsonNode) any);
-            result = new J2735PathHistory();
-         }
-      };
+      // new Expectations() {
+      //    {
+      //       PathHistoryBuilder.genericPathHistory((JsonNode) any);
+      //       result = new J2735PathHistory();
+      //    }
+      // };
 
       J2735BsmPart2Content outputContent = new J2735BsmPart2Content();
 
@@ -130,15 +130,15 @@ public class VehicleSafetyExtensionsBuilderTest {
    }
 
    @Test
-   public void testPathPrediction(@Capturing PathPredictionBuilder capturingPathPredictionBuilder)
+   public void testPathPrediction()
          throws BsmPart2ContentBuilderException {
 
-      new Expectations() {
-         {
-            PathPredictionBuilder.genericPathPrediction((JsonNode) any);
-            result = new J2735PathPrediction();
-         }
-      };
+      // new Expectations() {
+      //    {
+      //       PathPredictionBuilder.genericPathPrediction((JsonNode) any);
+      //       result = new J2735PathPrediction();
+      //    }
+      // };
 
       J2735BsmPart2Content outputContent = new J2735BsmPart2Content();
 

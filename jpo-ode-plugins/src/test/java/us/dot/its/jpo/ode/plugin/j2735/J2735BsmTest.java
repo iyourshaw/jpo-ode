@@ -23,17 +23,18 @@ import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import mockit.Mocked;
+// import mockit.Mocked;
 
 //import mockit.integration.junit4.JMockit;
 
-import mockit.Tested;
+// import mockit.Tested;
 //@RunWith(JMockit.class)
 public class J2735BsmTest {
-   @Mocked
-   J2735Bsm b;
+   // @Mocked
+   // J2735Bsm b;
    @Test
    public void testGettersAndSetters() {
+      J2735Bsm b = new J2735Bsm();
       J2735BsmCoreData coreData = new J2735BsmCoreData();
       b.setCoreData(coreData);
       assertEquals(coreData,b.getCoreData());

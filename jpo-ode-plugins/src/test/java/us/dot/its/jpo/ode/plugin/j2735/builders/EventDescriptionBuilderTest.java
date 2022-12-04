@@ -29,7 +29,7 @@ import org.junit.Test;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-import mockit.Capturing;
+//import mockit.Capturing;
 import us.dot.its.jpo.ode.plugin.j2735.J2735BitString;
 import us.dot.its.jpo.ode.plugin.j2735.J2735Extent;
 import us.dot.its.jpo.ode.util.CodecUtils;
@@ -111,7 +111,7 @@ public class EventDescriptionBuilderTest {
    }
 
    @Test
-   public void testEmptyRegional(@Capturing CodecUtils capturingCodecUtils) {
+   public void testEmptyRegional(CodecUtils capturingCodecUtils) {
 
       ObjectNode testNode = JsonUtils.newNode();
       testNode.put("typeEvent", 3);
@@ -121,7 +121,7 @@ public class EventDescriptionBuilderTest {
    }
 
    @Test
-   public void testRegional(@Capturing CodecUtils capturingCodecUtils) {
+   public void testRegional(CodecUtils capturingCodecUtils) {
 
       ArrayNode regions = JsonUtils.newArrayNode();
       regions.add(JsonUtils.newNode().put("regionId", 5).put("regExtValue", "something"));

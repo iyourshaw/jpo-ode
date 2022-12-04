@@ -24,12 +24,12 @@ import org.junit.runner.RunWith;
 
 //import mockit.integration.junit4.JMockit;
 
-import mockit.Tested;
+// import mockit.Tested;
 
 //@RunWith(JMockit.class)
 public class J2735TransmissionAndSpeedTest {
-   @Tested
-   J2735TransmissionAndSpeed tas;
+   // @Tested
+   J2735TransmissionAndSpeed tas = new J2735TransmissionAndSpeed();
 
    @Test
    public void testGettersAndSetters() {

@@ -33,25 +33,25 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-import mockit.Mock;
-import mockit.MockUp;
-import mockit.Mocked;
+// import mockit.Mock;
+// import mockit.MockUp;
+// import mockit.Mocked;
 import us.dot.its.jpo.ode.util.JsonUtils;
 import us.dot.its.jpo.ode.util.JsonUtils.JsonUtilsException;
 
 public class TravelerMessageFromHumanToAsnConverterTest {
-  @Mocked
-  private Logger logger;
+  // @Mocked
+  // private Logger logger;
 
-  @Before
-  public void setup() {
-    new MockUp<LoggerFactory>() {
-      @Mock
-      public Logger getLogger(String value) {
-        return logger;
-      }
-    };
-  }
+  // @Before
+  // public void setup() {
+  //   new MockUp<LoggerFactory>() {
+  //     @Mock
+  //     public Logger getLogger(String value) {
+  //       return logger;
+  //     }
+  //   };
+  // }
 
   @Test
   public void testAdvisoryNodeLL() throws JsonProcessingException, IOException, JsonUtilsException {

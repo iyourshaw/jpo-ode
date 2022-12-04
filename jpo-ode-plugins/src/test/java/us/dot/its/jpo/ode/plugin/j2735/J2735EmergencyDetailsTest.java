@@ -20,17 +20,18 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import mockit.Tested;
+// import mockit.Tested;
 //import mockit.integration.junit4.JMockit;
 
 //@RunWith(JMockit.class)
 public class J2735EmergencyDetailsTest {
 
-   @Tested
-   J2735EmergencyDetails ed;
+   // @Tested
+   // J2735EmergencyDetails ed;
 
    @Test
    public void testGettersAndSetters() {
+      J2735EmergencyDetails ed = new J2735EmergencyDetails();
       Integer sspRights = 1;
       ed.setSspRights(sspRights);
       assertEquals(sspRights,ed.getSspRights());

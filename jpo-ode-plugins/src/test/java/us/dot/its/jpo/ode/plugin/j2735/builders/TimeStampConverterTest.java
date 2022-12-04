@@ -23,9 +23,9 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mockit.Mock;
-import mockit.MockUp;
-import mockit.Mocked;
+// import mockit.Mock;
+// import mockit.MockUp;
+// import mockit.Mocked;
 
 /**
  * Test class for TravelerMessageFromHumanToAsnConverter.translateISOTimeStampToMinuteOfYear()
@@ -33,22 +33,21 @@ import mockit.Mocked;
  */
 public class TimeStampConverterTest {
    
-  @Mocked
-  private Logger logger;
+  
   
    @BeforeClass
    public static void classSetup() {
    }
    
-   @Before
-   public void setup() {
-     new MockUp<LoggerFactory>() {
-       @Mock
-       public Logger getLogger(String value) {
-           return logger;
-       }
-     };
-   }
+   // @Before
+   // public void setup() {
+   //   new MockUp<LoggerFactory>() {
+   //     @Mock
+   //     public Logger getLogger(String value) {
+   //         return logger;
+   //     }
+   //   };
+   // }
 
    @Test
    public void testKnownTime() {

@@ -28,22 +28,22 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-import mockit.Capturing;
+// import mockit.Capturing;
 import us.dot.its.jpo.ode.plugin.j2735.J2735TransmissionState;
 import us.dot.its.jpo.ode.util.JsonUtils;
 
 public class BsmCoreDataBuilderTest {
 
-   @Capturing
-   AccelerationSet4WayBuilder capturingAccelerationSet4WayBuilder;
-   @Capturing
-   PositionalAccuracyBuilder capturingPositionalAccuracyBuilder;
-   @Capturing
-   SpeedOrVelocityBuilder capturingSpeedOrVelocityBuilder;
-   @Capturing
-   BrakeSystemStatusBuilder capturingBrakeSystemStatusBuilder;
-   @Capturing
-   VehicleSizeBuilder capturingVehicleSizeBuilder;
+   // @Capturing
+   // AccelerationSet4WayBuilder capturingAccelerationSet4WayBuilder;
+   // @Capturing
+   // PositionalAccuracyBuilder capturingPositionalAccuracyBuilder;
+   // @Capturing
+   // SpeedOrVelocityBuilder capturingSpeedOrVelocityBuilder;
+   // @Capturing
+   // BrakeSystemStatusBuilder capturingBrakeSystemStatusBuilder;
+   // @Capturing
+   // VehicleSizeBuilder capturingVehicleSizeBuilder;
 
    @Test
    public void testRequiredElements() {

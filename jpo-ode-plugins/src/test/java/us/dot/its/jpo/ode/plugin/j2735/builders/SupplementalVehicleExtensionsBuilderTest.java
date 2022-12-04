@@ -29,8 +29,8 @@ import org.junit.Test;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-import mockit.Capturing;
-import mockit.Expectations;
+// import mockit.Capturing;
+// import mockit.Expectations;
 import us.dot.its.jpo.ode.plugin.j2735.J2735BsmPart2Content;
 import us.dot.its.jpo.ode.plugin.j2735.J2735DisabledVehicle;
 import us.dot.its.jpo.ode.plugin.j2735.J2735ObstacleDetection;
@@ -60,14 +60,14 @@ public class SupplementalVehicleExtensionsBuilderTest {
    }
 
    @Test
-   public void testVehicleClass(@Capturing VehicleClassificationBuilder capturingVehicleClassificationBuilder) {
+   public void testVehicleClass(VehicleClassificationBuilder capturingVehicleClassificationBuilder) {
 
-      new Expectations() {
-         {
-            VehicleClassificationBuilder.genericVehicleClassification((JsonNode) any);
-            result = new J2735VehicleClassification();
-         }
-      };
+      // new Expectations() {
+      //    {
+      //       VehicleClassificationBuilder.genericVehicleClassification((JsonNode) any);
+      //       result = new J2735VehicleClassification();
+      //    }
+      // };
 
       ObjectNode testInput = JsonUtils.newNode();
       testInput.put("classDetails", "something");
@@ -81,14 +81,14 @@ public class SupplementalVehicleExtensionsBuilderTest {
    }
 
    @Test
-   public void testVehicleData(@Capturing VehicleDataBuilder capturingVehicleDataBuilder) {
+   public void testVehicleData(VehicleDataBuilder capturingVehicleDataBuilder) {
 
-      new Expectations() {
-         {
-            VehicleDataBuilder.genericVehicleData((JsonNode) any);
-            result = new J2735VehicleData();
-         }
-      };
+      // new Expectations() {
+      //    {
+      //       VehicleDataBuilder.genericVehicleData((JsonNode) any);
+      //       result = new J2735VehicleData();
+      //    }
+      // };
 
       ObjectNode testInput = JsonUtils.newNode();
       testInput.put("vehicleData", "something");
@@ -100,14 +100,14 @@ public class SupplementalVehicleExtensionsBuilderTest {
    }
 
    @Test
-   public void testWeatherReport(@Capturing WeatherReportBuilder capturingWeatherReportBuilder) {
+   public void testWeatherReport() {
 
-      new Expectations() {
-         {
-            WeatherReportBuilder.genericWeatherReport((JsonNode) any);
-            result = new J2735WeatherReport();
-         }
-      };
+      // new Expectations() {
+      //    {
+      //       WeatherReportBuilder.genericWeatherReport((JsonNode) any);
+      //       result = new J2735WeatherReport();
+      //    }
+      // };
 
       ObjectNode testInput = JsonUtils.newNode();
       testInput.put("weatherReport", "something");
@@ -119,14 +119,14 @@ public class SupplementalVehicleExtensionsBuilderTest {
    }
 
    @Test
-   public void testWeatherProbe(@Capturing WeatherProbeBuilder capturingWeatherProbeBuilder) {
+   public void testWeatherProbe() {
 
-      new Expectations() {
-         {
-            WeatherProbeBuilder.genericWeatherProbe((JsonNode) any);
-            result = new J2735WeatherProbe();
-         }
-      };
+      // new Expectations() {
+      //    {
+      //       WeatherProbeBuilder.genericWeatherProbe((JsonNode) any);
+      //       result = new J2735WeatherProbe();
+      //    }
+      // };
 
       ObjectNode testInput = JsonUtils.newNode();
       testInput.put("weatherProbe", "something");
@@ -138,14 +138,14 @@ public class SupplementalVehicleExtensionsBuilderTest {
    }
 
    @Test
-   public void testObstacle(@Capturing ObstacleDetectionBuilder capturingObstacleDetectionBuilder) {
+   public void testObstacle() {
 
-      new Expectations() {
-         {
-            ObstacleDetectionBuilder.genericObstacleDetection((JsonNode) any);
-            result = new J2735ObstacleDetection();
-         }
-      };
+      // new Expectations() {
+      //    {
+      //       ObstacleDetectionBuilder.genericObstacleDetection((JsonNode) any);
+      //       result = new J2735ObstacleDetection();
+      //    }
+      // };
 
       ObjectNode testInput = JsonUtils.newNode();
       testInput.put("obstacle", "something");
@@ -157,14 +157,14 @@ public class SupplementalVehicleExtensionsBuilderTest {
    }
 
    @Test
-   public void testStatus(@Capturing DisabledVehicleBuilder capturingDisabledVehicleBuilder) {
+   public void testStatus() {
 
-      new Expectations() {
-         {
-            DisabledVehicleBuilder.genericDisabledVehicle((JsonNode) any);
-            result = new J2735DisabledVehicle();
-         }
-      };
+      // new Expectations() {
+      //    {
+      //       DisabledVehicleBuilder.genericDisabledVehicle((JsonNode) any);
+      //       result = new J2735DisabledVehicle();
+      //    }
+      // };
 
       ObjectNode testInput = JsonUtils.newNode();
       testInput.put("status", "something");
@@ -176,14 +176,14 @@ public class SupplementalVehicleExtensionsBuilderTest {
    }
 
    @Test
-   public void testSpeedProfile(@Capturing SpeedProfileBuilder capturingSpeedProfileBuilder) {
+   public void testSpeedProfile() {
 
-      new Expectations() {
-         {
-            SpeedProfileBuilder.genericSpeedProfile((JsonNode) any);
-            result = new J2735SpeedProfile();
-         }
-      };
+      // new Expectations() {
+      //    {
+      //       SpeedProfileBuilder.genericSpeedProfile((JsonNode) any);
+      //       result = new J2735SpeedProfile();
+      //    }
+      // };
 
       ObjectNode testInput = JsonUtils.newNode();
       testInput.put("speedProfile", "something");
@@ -195,14 +195,14 @@ public class SupplementalVehicleExtensionsBuilderTest {
    }
 
    @Test
-   public void testRtcmPackage(@Capturing RTCMPackageBuilder capturingRTCMPackageBuilder) {
+   public void testRtcmPackage() {
 
-      new Expectations() {
-         {
-            RTCMPackageBuilder.genericRTCMPackage((JsonNode) any);
-            result = new J2735RTCMPackage();
-         }
-      };
+      // new Expectations() {
+      //    {
+      //       RTCMPackageBuilder.genericRTCMPackage((JsonNode) any);
+      //       result = new J2735RTCMPackage();
+      //    }
+      // };
 
       ObjectNode testInput = JsonUtils.newNode();
       testInput.put("theRTCM", "something");

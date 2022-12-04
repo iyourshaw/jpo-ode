@@ -22,16 +22,17 @@ import java.math.BigDecimal;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import mockit.Tested;
+// import mockit.Tested;
 //import mockit.integration.junit4.JMockit;
 
 //@RunWith(JMockit.class)
 public class J2735FullPositionVectorTest {
-   @Tested
-   J2735FullPositionVector fpv;
+   // @Tested
+   // J2735FullPositionVector fpv;
    
    @Test
    public void testGettersAndSetters() {
+      J2735FullPositionVector fpv = new J2735FullPositionVector();
       OdePosition3D position = new OdePosition3D();
       fpv.setPosition(position);
       assertEquals(position,fpv.getPosition());

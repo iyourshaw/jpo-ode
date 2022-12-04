@@ -23,16 +23,17 @@ import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import mockit.Tested;
+// import mockit.Tested;
 //import mockit.integration.junit4.JMockit;
 
 //@RunWith(JMockit.class)
 public class J2735SpeedProfileTest {
-   @Tested
-   J2735SpeedProfile sp;
+   // @Tested
+   // J2735SpeedProfile sp;
    
    @Test
    public void testGettersAndSetters() {
+      J2735SpeedProfile sp = new J2735SpeedProfile();
       List<Integer> speedReports = new ArrayList<>();
       sp.setSpeedReports(speedReports);
       assertEquals(speedReports,sp.getSpeedReports());

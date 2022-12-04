@@ -29,8 +29,8 @@ import org.junit.Test;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-import mockit.Capturing;
-import mockit.Expectations;
+// import mockit.Capturing;
+// import mockit.Expectations;
 import us.dot.its.jpo.ode.plugin.j2735.J2735WiperSet;
 import us.dot.its.jpo.ode.util.JsonUtils;
 
@@ -278,14 +278,14 @@ public class WeatherProbeBuilderTest {
    }
 
    @Test
-   public void testRainRates(@Capturing WiperSetBuilder capturingWiperSetBuilder) {
+   public void testRainRates(WiperSetBuilder capturingWiperSetBuilder) {
 
-      new Expectations() {
-         {
-            WiperSetBuilder.genericWiperSet((JsonNode) any);
-            result = new J2735WiperSet();
-         }
-      };
+      // new Expectations() {
+      //    {
+      //       WiperSetBuilder.genericWiperSet((JsonNode) any);
+      //       result = new J2735WiperSet();
+      //    }
+      // };
 
       ObjectNode testInput = JsonUtils.newNode();
       JsonUtils.addNode(testInput, "rainRates", JsonUtils.newNode());

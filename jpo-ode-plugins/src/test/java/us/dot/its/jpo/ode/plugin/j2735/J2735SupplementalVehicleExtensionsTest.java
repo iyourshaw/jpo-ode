@@ -20,13 +20,13 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import mockit.Tested;
+// import mockit.Tested;
 //import mockit.integration.junit4.JMockit;
 
 //@RunWith(JMockit.class)
 public class J2735SupplementalVehicleExtensionsTest {
-   @Tested
-   J2735SupplementalVehicleExtensions sve;
+   // @Tested
+   J2735SupplementalVehicleExtensions sve = new J2735SupplementalVehicleExtensions();
    
    @Test
    public void testGettersAndSetters() {

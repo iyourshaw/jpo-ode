@@ -29,8 +29,8 @@ import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-import mockit.Capturing;
-import mockit.Expectations;
+// import mockit.Capturing;
+// import mockit.Expectations;
 import us.dot.its.jpo.ode.plugin.j2735.DsrcPosition3D;
 import us.dot.its.jpo.ode.plugin.j2735.OdePosition3D;
 import us.dot.its.jpo.ode.util.JsonUtils;
@@ -96,18 +96,17 @@ public class Position3DBuilderTest {
    }
 
    @Test
-   public void testOdePosition3DToDsrcPosition3D(@Capturing LatitudeBuilder capturingLatitudeBuilder,
-         @Capturing LongitudeBuilder capturingLongitudeBuilder, @Capturing ElevationBuilder capturingElevationBuilder) {
-      new Expectations() {
-         {
-            LatitudeBuilder.j2735Latitude((BigDecimal) any);
-            result = Long.valueOf(5);
-            LongitudeBuilder.j2735Longitude((BigDecimal) any);
-            result = Long.valueOf(6);
-            ElevationBuilder.j2735Elevation((BigDecimal) any);
-            result = Long.valueOf(7);
-         }
-      };
+   public void testOdePosition3DToDsrcPosition3D() {
+      // new Expectations() {
+      //    {
+      //       LatitudeBuilder.j2735Latitude((BigDecimal) any);
+      //       result = Long.valueOf(5);
+      //       LongitudeBuilder.j2735Longitude((BigDecimal) any);
+      //       result = Long.valueOf(6);
+      //       ElevationBuilder.j2735Elevation((BigDecimal) any);
+      //       result = Long.valueOf(7);
+      //    }
+      // };
 
       DsrcPosition3D result = Position3DBuilder
             .dsrcPosition3D(new OdePosition3D(BigDecimal.ONE, BigDecimal.ONE, BigDecimal.ONE));

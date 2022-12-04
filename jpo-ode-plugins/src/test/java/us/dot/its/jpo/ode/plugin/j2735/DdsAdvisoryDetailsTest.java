@@ -19,18 +19,19 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import mockit.Tested;
+//import mockit.Tested;
 import us.dot.its.jpo.ode.plugin.ieee1609dot2.Ieee1609Dot2DataTag;
 import us.dot.its.jpo.ode.plugin.j2735.DdsAdvisoryDetails.AdvisoryBroadcastType;
 import us.dot.its.jpo.ode.util.CodecUtils;
 
 public class DdsAdvisoryDetailsTest {
 
-   @Tested
-   DdsAdvisoryDetails testDdsAdvisoryDetails;
+//    @Tested
+//    DdsAdvisoryDetails testDdsAdvisoryDetails;
 
    @Test
    public void testSettersGetters() {
+      DdsAdvisoryDetails testDdsAdvisoryDetails = new DdsAdvisoryDetails();
       testDdsAdvisoryDetails.setAsdmID("testAsdmID");
       testDdsAdvisoryDetails.setAsdmType(1);
       testDdsAdvisoryDetails.setDistType(CodecUtils.toHex(DdsAdvisorySituationData.IP));

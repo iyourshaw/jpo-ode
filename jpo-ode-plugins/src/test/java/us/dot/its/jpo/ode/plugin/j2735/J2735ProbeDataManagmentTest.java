@@ -21,18 +21,19 @@ import static org.junit.Assert.assertNull;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import mockit.Tested;
+// import mockit.Tested;
 //import mockit.integration.junit4.JMockit;
 import us.dot.its.jpo.ode.plugin.j2735.J2735ProbeDataManagment;
 
 //@RunWith(JMockit.class)
 public class J2735ProbeDataManagmentTest {
 
-    @Tested
-    J2735ProbeDataManagment testPDM;
+    // @Tested
+    // J2735ProbeDataManagment testPDM;
 
     @Test
     public void testSettersAndGetters() {
+        J2735ProbeDataManagment testPDM = new J2735ProbeDataManagment();
 
         int testDirections = 11;
         testPDM.setDirections(testDirections);

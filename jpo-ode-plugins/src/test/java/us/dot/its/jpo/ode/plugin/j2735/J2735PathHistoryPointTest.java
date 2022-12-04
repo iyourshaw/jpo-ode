@@ -22,13 +22,13 @@ import java.math.BigDecimal;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import mockit.Tested;
+// import mockit.Tested;
 //import mockit.integration.junit4.JMockit;
 
 //@RunWith(JMockit.class)
 public class J2735PathHistoryPointTest {
-   @Tested
-   J2735PathHistoryPoint php;
+   // @Tested
+   J2735PathHistoryPoint php = new J2735PathHistoryPoint();
 
    @Test
    public void testGettersAndSetters() {

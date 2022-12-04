@@ -19,15 +19,16 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import mockit.Tested;
+// import mockit.Tested;
 
 public class J2735SpecialVehicleExtensionTest {
-   @Tested
-   J2735SpecialVehicleExtensions sve;
+   // @Tested
+   // J2735SpecialVehicleExtensions sve;
    
    @Test
    public void testGettersAndSetters() {
       J2735TrailerData trailers = new J2735TrailerData();
+      J2735SpecialVehicleExtensions sve = new J2735SpecialVehicleExtensions();
       sve.setTrailers(trailers);
       assertEquals(trailers,sve.getTrailers());
       

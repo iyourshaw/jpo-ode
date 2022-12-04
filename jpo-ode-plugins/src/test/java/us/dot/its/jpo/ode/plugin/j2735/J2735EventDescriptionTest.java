@@ -22,15 +22,16 @@ import java.util.List;
 
 import org.junit.Test;
 
-import mockit.Tested;
+//import mockit.Tested;
 
 public class J2735EventDescriptionTest {
 
-   @Tested
-   J2735EventDescription ed;
+   // @Tested
+   // J2735EventDescription ed;
 
    @Test
    public void testGettersAndSetters() {
+      J2735EventDescription ed = new J2735EventDescription();
       List<Integer> description = new ArrayList<>();
       ed.setDescription(description);
       assertEquals(description, ed.getDescription());

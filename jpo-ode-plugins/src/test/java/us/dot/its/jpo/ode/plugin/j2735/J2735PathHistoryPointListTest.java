@@ -23,13 +23,13 @@ import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import mockit.Tested;
+// import mockit.Tested;
 //import mockit.integration.junit4.JMockit;
 
 //@RunWith(JMockit.class)
 public class J2735PathHistoryPointListTest {
-   @Tested
-   J2735PathHistoryPointList phpl;
+   // @Tested
+   J2735PathHistoryPointList phpl = new J2735PathHistoryPointList();
 
    @Test
    public void testGettersAndSetters() {

@@ -23,13 +23,13 @@ import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import mockit.Tested;
+// import mockit.Tested;
 //import mockit.integration.junit4.JMockit;
 
 //@RunWith(JMockit.class)
 public class J2735TrailerDataTest {
-   @Tested
-   J2735TrailerData td;
+   // @Tested
+   J2735TrailerData td = new J2735TrailerData();
    
    @Test
    public void testGettersAndSetters() {

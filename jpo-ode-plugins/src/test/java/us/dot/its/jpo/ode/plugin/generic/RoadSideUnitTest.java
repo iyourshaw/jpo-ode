@@ -26,15 +26,15 @@ import java.lang.reflect.Modifier;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import mockit.Tested;
+// import mockit.Tested;
 //import mockit.integration.junit4.JMockit;
 import us.dot.its.jpo.ode.plugin.RoadSideUnit;
 import us.dot.its.jpo.ode.plugin.RoadSideUnit.RSU;
 
 //@RunWith(JMockit.class)
 public class RoadSideUnitTest {
-   @Tested
-   RSU testRSU;
+  //  @Tested
+   RSU testRSU = new RSU();
 
    @Test
    public void testGettersAndSetters() {

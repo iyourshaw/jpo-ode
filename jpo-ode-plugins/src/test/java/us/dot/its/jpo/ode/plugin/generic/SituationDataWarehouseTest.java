@@ -27,7 +27,7 @@ import java.lang.reflect.Modifier;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import mockit.Tested;
+// import mockit.Tested;
 //import mockit.integration.junit4.JMockit;
 import us.dot.its.jpo.ode.plugin.SituationDataWarehouse;
 import us.dot.its.jpo.ode.plugin.SituationDataWarehouse.SDW;
@@ -36,8 +36,8 @@ import us.dot.its.jpo.ode.plugin.j2735.OdeGeoRegion;
 
 //@RunWith(JMockit.class)
 public class SituationDataWarehouseTest {
-   @Tested
-   SDW testSDW;
+   // @Tested
+   SDW testSDW = new SDW();
 
    @Test
    public void testGettersAndSetters() {
