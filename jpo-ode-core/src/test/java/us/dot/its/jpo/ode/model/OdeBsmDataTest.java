@@ -16,6 +16,7 @@ public class OdeBsmDataTest {
         assertNotNull(deserialized);
         assertTrue(deserialized.getMetadata() instanceof OdeBsmMetadata);
         assertTrue(deserialized.getPayload() instanceof OdeBsmPayload);
+        System.out.printf("%s", deserialized);
         
     }
 }
