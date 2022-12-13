@@ -30,7 +30,11 @@ import us.dot.its.jpo.ode.util.DateTimeUtils;
 @JsonSubTypes({
    @Type(value = OdeBsmMetadata.class, name = "us.dot.its.jpo.ode.model.OdeBsmPayload"),
    @Type(value = OdeMapMetadata.class, name = "us.dot.its.jpo.ode.model.OdeMapPayload"),
-   @Type(value = OdeSpatMetadata.class, name = "us.dot.its.jpo.ode.model.OdeSpatPayload")
+   @Type(value = OdeSpatMetadata.class, name = "us.dot.its.jpo.ode.model.OdeSpatPayload"),
+   @Type(value = OdeSrmMetadata.class, name = "us.dot.its.jpo.ode.model.OdeSrmPayload"),
+   @Type(value = OdeSsmMetadata.class, name = "us.dot.its.jpo.ode.model.OdeSsmPayload"),
+   @Type(value = OdeTimMetadata.class, name = "us.dot.its.jpo.ode.model.OdeTimPayload")
+
 })
 @JsonPropertyOrder({ "logFileName", "recordType", "receivedMessageDetails", "payloadType", "serialId",
       "odeReceivedAt", "schemaVersion", "maxDurationTime", "recordGeneratedAt", "recordGeneratedBy", "sanitized" })
