@@ -15,24 +15,8 @@
  ******************************************************************************/
 package us.dot.its.jpo.ode.model;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
-import static com.fasterxml.jackson.annotation.JsonTypeInfo.*;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
 
 
-@JsonTypeInfo(
-   use = Id.NAME,
-   include = As.PROPERTY,
-   property = "dataType")
-@JsonSubTypes({
-    @Type(value = OdeBsmPayload.class, name = "us.dot.its.jpo.ode.plugin.j2735.J2735Bsm"),
-    @Type(value = OdeMapPayload.class, name = "us.dot.its.jpo.ode.plugin.j2735.J2735MAP"),
-    @Type(value = OdeSpatPayload.class, name = "us.dot.its.jpo.ode.plugin.j2735.J2735SPAT"),
-    @Type(value = OdeSrmPayload.class, name = "us.dot.its.jpo.ode.plugin.j2735.J2735SRM"),
-    @Type(value = OdeSsmPayload.class, name = "us.dot.its.jpo.ode.plugin.j2735.J2735SSM"),
-    @Type(value = OdeTimPayload.class, name = "us.dot.its.jpo.ode.plugin.j2735.OdeTravelerInformationMessage")
-})
 public class OdeMsgPayload extends OdeObject {
     private static final long serialVersionUID = -7711340868799607662L;
 
