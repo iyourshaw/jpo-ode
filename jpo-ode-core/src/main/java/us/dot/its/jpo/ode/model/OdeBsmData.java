@@ -18,6 +18,8 @@ package us.dot.its.jpo.ode.model;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import static com.fasterxml.jackson.annotation.JsonTypeInfo.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 
 public class OdeBsmData extends OdeData {
@@ -32,32 +34,18 @@ public class OdeBsmData extends OdeData {
       super(metadata, payload);
    }
 
-   // @JsonTypeInfo(use = Id.NAME, include = As.PROPERTY, property = "payloadType")
-   // @JsonSubTypes({
-   //       @Type(value = OdeBsmMetadata.class, name = "us.dot.its.jpo.ode.model.OdeBsmPayload"),
-   //       @Type(value = OdeMapMetadata.class, name = "us.dot.its.jpo.ode.model.OdeMapPayload"),
-   //       @Type(value = OdeSpatMetadata.class, name = "us.dot.its.jpo.ode.model.OdeSpatPayload"),
-   //       @Type(value = OdeSrmMetadata.class, name = "us.dot.its.jpo.ode.model.OdeSrmPayload"),
-   //       @Type(value = OdeSsmMetadata.class, name = "us.dot.its.jpo.ode.model.OdeSsmPayload"),
-   //       @Type(value = OdeTimMetadata.class, name = "us.dot.its.jpo.ode.model.OdeTimPayload")
-   // })
-   // @Override
-   // public void setMetadata(OdeMsgMetadata metadata) {
-   //    super.setMetadata(metadata);
-   // }
+  
 
-   // @JsonTypeInfo(use = Id.NAME, include = As.PROPERTY, property = "dataType")
-   // @JsonSubTypes({
-   //       @Type(value = OdeBsmPayload.class, name = "us.dot.its.jpo.ode.plugin.j2735.J2735Bsm"),
-   //       @Type(value = OdeMapPayload.class, name = "us.dot.its.jpo.ode.plugin.j2735.J2735MAP"),
-   //       @Type(value = OdeSpatPayload.class, name = "us.dot.its.jpo.ode.plugin.j2735.J2735SPAT"),
-   //       @Type(value = OdeSrmPayload.class, name = "us.dot.its.jpo.ode.plugin.j2735.J2735SRM"),
-   //       @Type(value = OdeSsmPayload.class, name = "us.dot.its.jpo.ode.plugin.j2735.J2735SSM"),
-   //       @Type(value = OdeTimPayload.class, name = "us.dot.its.jpo.ode.plugin.j2735.OdeTravelerInformationMessage")
-   // })
-   // @Override
-   // public void setPayload(OdeMsgPayload payload) {
-   //    super.setPayload(payload);
-   // }
+   @JsonTypeInfo(use = Id.CLASS, defaultImpl=OdeBsmMetadata.class)
+   @Override
+   public void setMetadata(OdeMsgMetadata metadata) {
+      super.setMetadata(metadata);
+   }
+
+   @JsonTypeInfo(use = Id.CLASS, defaultImpl=OdeBsmPayload.class)
+   @Override
+   public void setPayload(OdeMsgPayload payload) {
+      super.setPayload(payload);
+   }
 
 }

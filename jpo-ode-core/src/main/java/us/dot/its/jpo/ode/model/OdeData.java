@@ -44,19 +44,19 @@ public class OdeData extends OdeObject implements OdeFilterable {
         return metadata;
     }
 
-   @JsonTypeInfo(
-      use = Id.NAME,
-      include = As.PROPERTY,
-      property = "payloadType")
-   @JsonSubTypes({
-      @Type(value = OdeBsmMetadata.class, name = "us.dot.its.jpo.ode.model.OdeBsmPayload"),
-      @Type(value = OdeMapMetadata.class, name = "us.dot.its.jpo.ode.model.OdeMapPayload"),
-      @Type(value = OdeSpatMetadata.class, name = "us.dot.its.jpo.ode.model.OdeSpatPayload"),
-      @Type(value = OdeSrmMetadata.class, name = "us.dot.its.jpo.ode.model.OdeSrmPayload"),
-      @Type(value = OdeSsmMetadata.class, name = "us.dot.its.jpo.ode.model.OdeSsmPayload"),
-      @Type(value = OdeTimMetadata.class, name = "us.dot.its.jpo.ode.model.OdeTimPayload")
-   })
-    public void setMetadata(OdeMsgMetadata metadata) {
+   // @JsonTypeInfo(
+   //    use = Id.NAME,
+   //    include = As.PROPERTY,
+   //    property = "payloadType")
+   // @JsonSubTypes({
+   //    @Type(value = OdeBsmMetadata.class, name = "us.dot.its.jpo.ode.model.OdeBsmPayload"),
+   //    @Type(value = OdeMapMetadata.class, name = "us.dot.its.jpo.ode.model.OdeMapPayload"),
+   //    @Type(value = OdeSpatMetadata.class, name = "us.dot.its.jpo.ode.model.OdeSpatPayload"),
+   //    @Type(value = OdeSrmMetadata.class, name = "us.dot.its.jpo.ode.model.OdeSrmPayload"),
+   //    @Type(value = OdeSsmMetadata.class, name = "us.dot.its.jpo.ode.model.OdeSsmPayload"),
+   //    @Type(value = OdeTimMetadata.class, name = "us.dot.its.jpo.ode.model.OdeTimPayload")
+   // })
+   public void setMetadata(OdeMsgMetadata metadata) {
         this.metadata = metadata;
     }
 
@@ -64,18 +64,18 @@ public class OdeData extends OdeObject implements OdeFilterable {
         return payload;
     }
 
-    @JsonTypeInfo(
-      use = Id.NAME,
-      include = As.PROPERTY,
-      property = "dataType")
-   @JsonSubTypes({
-      @Type(value = OdeBsmPayload.class, name = "us.dot.its.jpo.ode.plugin.j2735.J2735Bsm"),
-      @Type(value = OdeMapPayload.class, name = "us.dot.its.jpo.ode.plugin.j2735.J2735MAP"),
-      @Type(value = OdeSpatPayload.class, name = "us.dot.its.jpo.ode.plugin.j2735.J2735SPAT"),
-      @Type(value = OdeSrmPayload.class, name = "us.dot.its.jpo.ode.plugin.j2735.J2735SRM"),
-      @Type(value = OdeSsmPayload.class, name = "us.dot.its.jpo.ode.plugin.j2735.J2735SSM"),
-      @Type(value = OdeTimPayload.class, name = "us.dot.its.jpo.ode.plugin.j2735.OdeTravelerInformationMessage")
-   })
+   //  @JsonTypeInfo(
+   //    use = Id.NAME,
+   //    include = As.PROPERTY,
+   //    property = "dataType")
+   // @JsonSubTypes({
+   //    @Type(value = OdeBsmPayload.class, name = "us.dot.its.jpo.ode.plugin.j2735.J2735Bsm"),
+   //    @Type(value = OdeMapPayload.class, name = "us.dot.its.jpo.ode.plugin.j2735.J2735MAP"),
+   //    @Type(value = OdeSpatPayload.class, name = "us.dot.its.jpo.ode.plugin.j2735.J2735SPAT"),
+   //    @Type(value = OdeSrmPayload.class, name = "us.dot.its.jpo.ode.plugin.j2735.J2735SRM"),
+   //    @Type(value = OdeSsmPayload.class, name = "us.dot.its.jpo.ode.plugin.j2735.J2735SSM"),
+   //    @Type(value = OdeTimPayload.class, name = "us.dot.its.jpo.ode.plugin.j2735.OdeTravelerInformationMessage")
+   // })
     public void setPayload(OdeMsgPayload payload) {
         this.payload = payload;
     }
