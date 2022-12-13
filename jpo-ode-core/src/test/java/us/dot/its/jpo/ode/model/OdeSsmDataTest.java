@@ -7,7 +7,7 @@ import us.dot.its.jpo.ode.util.JsonUtils;
 
 public class OdeSsmDataTest {
     @Test
-    public void shouldDeserializJson() {
+    public void shouldDeserializeJson() {
 
         final String bsmJson = "";
 
