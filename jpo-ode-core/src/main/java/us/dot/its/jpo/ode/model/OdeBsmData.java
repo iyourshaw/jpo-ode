@@ -16,11 +16,7 @@
 package us.dot.its.jpo.ode.model;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import static com.fasterxml.jackson.annotation.JsonTypeInfo.*;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
 
 public class OdeBsmData extends OdeData {
 
@@ -34,16 +30,14 @@ public class OdeBsmData extends OdeData {
       super(metadata, payload);
    }
 
-  
-
-   @JsonTypeInfo(use = Id.CLASS, defaultImpl=OdeBsmMetadata.class)
    @Override
+   @JsonTypeInfo(use = Id.CLASS, defaultImpl = OdeBsmMetadata.class)
    public void setMetadata(OdeMsgMetadata metadata) {
       super.setMetadata(metadata);
    }
 
-   @JsonTypeInfo(use = Id.CLASS, defaultImpl=OdeBsmPayload.class)
    @Override
+   @JsonTypeInfo(use = Id.CLASS, defaultImpl = OdeBsmPayload.class)
    public void setPayload(OdeMsgPayload payload) {
       super.setPayload(payload);
    }
