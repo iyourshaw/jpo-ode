@@ -1,5 +1,12 @@
 package us.dot.its.jpo.ode.model;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.networknt.schema.JsonSchema;
+import com.networknt.schema.JsonSchemaFactory;
+import com.networknt.schema.SpecVersion;
+import com.networknt.schema.ValidationMessage;
+import java.util.Set;
+
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -24,5 +31,18 @@ public class OdeSsmDataTest {
         final var deserialized = (OdeSsmData)JsonUtils.fromJson(json, OdeSsmData.class);
         final String serialized = deserialized.toJson(false);
         assertFalse(serialized.contains("@class"));
+    }
+
+    @Test
+    public void shouldValidateJson() throws Exception {
+        final var deserialized = (OdeSsmData)JsonUtils.fromJson(json, OdeSsmData.class);
+        final String serialized = deserialized.toJson(false);
+
+        // Load json schema from resource
+        JsonSchemaFactory factory = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V4);
+        final JsonSchema schema = factory.getSchema(getClass().getClassLoader().getResource("schemas/schema-ssm.json").toURI());
+        final JsonNode node = (JsonNode)JsonUtils.fromJson(serialized, JsonNode.class);
+        Set<ValidationMessage> validationMessages = schema.validate(node);
+        assertEquals(String.format("Json validation errors: %s", validationMessages), validationMessages.size(), 0);
     }
 }

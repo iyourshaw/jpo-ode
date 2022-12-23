@@ -7,12 +7,11 @@ import com.networknt.schema.JsonSchema;
 import com.networknt.schema.JsonSchemaFactory;
 import com.networknt.schema.SpecVersion;
 import com.networknt.schema.ValidationMessage;
+import java.util.Set;
 
 import static org.junit.Assert.*;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Set;
+
 
 import us.dot.its.jpo.ode.plugin.j2735.J2735Bsm;
 import us.dot.its.jpo.ode.plugin.j2735.J2735SupplementalVehicleExtensions;
@@ -86,7 +85,6 @@ public class OdeBsmDataTest {
 
     private void validateJson(final String serialized) throws Exception {
         // Load json schema from resource
-        //final String schemaContent = Files.readString(Paths.get(getClass().getClassLoader().getResource("schemas/schema-bsm.json").toURI()));
         JsonSchemaFactory factory = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7);
         final JsonSchema schema = factory.getSchema(getClass().getClassLoader().getResource("schemas/schema-bsm.json").toURI());
         final JsonNode node = (JsonNode)JsonUtils.fromJson(serialized, JsonNode.class);
