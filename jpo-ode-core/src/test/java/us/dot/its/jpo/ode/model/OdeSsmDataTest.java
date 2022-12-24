@@ -43,6 +43,6 @@ public class OdeSsmDataTest {
         final JsonSchema schema = factory.getSchema(getClass().getClassLoader().getResource("schemas/schema-ssm.json").toURI());
         final JsonNode node = (JsonNode)JsonUtils.fromJson(serialized, JsonNode.class);
         Set<ValidationMessage> validationMessages = schema.validate(node);
-        assertEquals(String.format("Json validation errors: %s", validationMessages), validationMessages.size(), 0);
+        assertEquals(String.format("Json validation errors: %s", validationMessages), 0, validationMessages.size());
     }
 }
