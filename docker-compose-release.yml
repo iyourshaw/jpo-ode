@@ -8,6 +8,8 @@ services:
       options:
         max-size: "10m"
         max-file: "5"
+#    healthcheck:
+#      test: sleep 20 || exit 0
 
   kafka:
     image: wurstmeister/kafka
@@ -37,11 +39,11 @@ services:
       options:
         max-size: "10m"
         max-file: "5"
-    healthcheck:
-      test: kafka-cluster.sh cluster-id --bootstrap-server localhost:9092 || exit 1
-      interval: 1s
-      timeout: 60s
-      retries: 60
+#    healthcheck:
+#      test: kafka-topics.sh --bootstrap-server localhost:9092 --list || exit 0
+#      interval: 5s
+#      timeout: 10s
+#      retries: 5
 
   ode:
     image: usdotjpoode/jpo-ode:release_2.0.0
@@ -88,8 +90,7 @@ services:
       ACM_LOG_TO_FILE: ${ADM_LOG_TO_FILE}
       ACM_LOG_LEVEL: ${ADM_LOG_LEVEL}
     depends_on:
-      kafka:
-        condition: service_healthy
+      - kafka
     volumes:
       - ${DOCKER_SHARED_VOLUME}:/asn1_codec_share
     logging:
@@ -106,8 +107,7 @@ services:
       ACM_LOG_TO_FILE: ${AEM_LOG_TO_FILE}
       ACM_LOG_LEVEL: ${AEM_LOG_LEVEL}
     depends_on:
-      kafka:
-        condition: service_healthy
+      - kafka
     volumes:
       - ${DOCKER_SHARED_VOLUME}:/asn1_codec_share
     logging:
