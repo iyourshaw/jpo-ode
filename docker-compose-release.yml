@@ -8,6 +8,11 @@ services:
       options:
         max-size: "10m"
         max-file: "5"
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "2181"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
 
 
   kafka:
@@ -31,13 +36,19 @@ services:
                                      # which Kafka will force the log to roll even if the segment
                                      # file isn't full to ensure that retention can delete or compact old data.
     depends_on:
-      - zookeeper
+      zookeeper:
+        condition: service_healthy
     volumes:
       - ${DOCKER_SHARED_VOLUME}/var/run/docker.sock:/var/run/docker.sock
     logging:
       options:
         max-size: "10m"
         max-file: "5"
+    healthcheck:
+      test: [ "CMD", "nc", "-z", "localhost", "9092" ]
+      interval: 5s
+      timeout: 3s
+      retries: 12
 
 
   ode:
@@ -85,7 +96,8 @@ services:
       ACM_LOG_TO_FILE: ${ADM_LOG_TO_FILE}
       ACM_LOG_LEVEL: ${ADM_LOG_LEVEL}
     depends_on:
-      - kafka
+      kafka:
+        condition: service_healthy
     volumes:
       - ${DOCKER_SHARED_VOLUME}:/asn1_codec_share
     logging:
@@ -102,7 +114,8 @@ services:
       ACM_LOG_TO_FILE: ${AEM_LOG_TO_FILE}
       ACM_LOG_LEVEL: ${AEM_LOG_LEVEL}
     depends_on:
-      - kafka
+      kafka:
+        condition: service_healthy
     volumes:
       - ${DOCKER_SHARED_VOLUME}:/asn1_codec_share
     logging:
