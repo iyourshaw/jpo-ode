@@ -1,4 +1,3 @@
-version: '3'
 services:
   kafka:
     image: bitnami/kafka:latest
@@ -61,7 +60,7 @@ services:
       #ODE_DDS_CAS_PASSWORD: ${ODE_DDS_CAS_PASSWORD}
     depends_on:
       kafka:
-        condition: service_healthy
+        condition: service_started
     volumes:
       - ${DOCKER_SHARED_VOLUME}:/jpo-ode
       - ${DOCKER_SHARED_VOLUME}/uploads:/home/uploads
@@ -80,7 +79,7 @@ services:
       ACM_LOG_LEVEL: ${ADM_LOG_LEVEL}
     depends_on:
       kafka:
-        condition: service_healthy
+        condition: service_started
     volumes:
       - ${DOCKER_SHARED_VOLUME}:/asn1_codec_share
     logging:
@@ -98,7 +97,7 @@ services:
       ACM_LOG_LEVEL: ${AEM_LOG_LEVEL}
     depends_on:
       kafka:
-        condition: service_healthy
+        condition: service_started
     volumes:
       - ${DOCKER_SHARED_VOLUME}:/asn1_codec_share
     logging:
@@ -267,3 +266,7 @@ services:
       options:
         max-size: "10m"  
         max-file: "5"
+
+volumes:
+  kafka:
+    {}
