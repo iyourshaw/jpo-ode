@@ -4,6 +4,7 @@ services:
     hostname: kafka
     ports:
       - "9092:9092"
+      - "9001:9001"
     volumes:
       - kafka:/bitnami
     environment:
@@ -19,6 +20,8 @@ services:
       KAFKA_CFG_NODE_ID: "1"
       KAFKA_CFG_DELETE_TOPIC_ENABLE: "true"
       KAFKA_CFG_LOG_RETENTION_HOURS: 2
+      JMX_PORT: 9001
+      KAFKA_JMX_OPTS: "-Djava.rmi.server.hostname=127.0.0.1 -Dcom.sun.management.jmxremote.port=9001 -Dcom.sun.management.jmxremote.rmi.port=9001 -Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false"
     logging:
       options:
         max-size: "10m"
