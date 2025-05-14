@@ -71,7 +71,7 @@ public class BSMPojoToJSONListener {
   @KafkaListener(
       id = "BSMPojoToJSONListener",
       topics = "${ode.kafka.topics.pojo.bsm}",
-      containerFactory = "odeBsmDataConsumerListenerContainerFactory"
+      containerFactory = "odeMapDataConsumerListenerContainerFactory"
   )
   public void listen(ConsumerRecord<String, OdeMessageFrameData> consumerRecord) throws JsonProcessingException {
     log.debug("Received record on topic: {} with key: {}", consumerRecord.topic(), consumerRecord.key());

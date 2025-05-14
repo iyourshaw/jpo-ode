@@ -88,8 +88,10 @@ public class Asn1DecodedDataRouter {
 
     JSONObject consumed = XmlUtils.toJSONObject(consumerRecord.value())
         .getJSONObject(OdeAsn1Data.class.getSimpleName());
+    //log.debug("Consumed: {}", consumed);
 
     JSONObject payloadData = consumed.getJSONObject(OdeMsgPayload.PAYLOAD_STRING).getJSONObject(OdeMsgPayload.DATA_STRING);
+    //log.debug("Payload: {}", payloadData);
 
     if (payloadData.has("code")) {
       throw new Asn1DecodedDataRouterException(
@@ -103,6 +105,7 @@ public class Asn1DecodedDataRouter {
     DSRCmsgID messageId = new DSRCmsgID(msgId);
     String messageName = messageId.name().orElse("Unknown");
 
+    log.debug("Message name: {}", messageName);
 
     var metadataJson = XmlUtils.toJSONObject(consumerRecord.value())
         .getJSONObject(OdeAsn1Data.class.getSimpleName())
@@ -111,7 +114,7 @@ public class Asn1DecodedDataRouter {
         .valueOf(metadataJson.getString("recordType"));
 
     switch (messageName) {
-      case "BasicSafetyMessage" -> {
+      case "basicSafetyMessage" -> {
         switch (recordType) {
           case bsmLogDuringEvent -> routeMessageFrame(consumerRecord, pojoTopics.getBsmDuringEvent(), pojoTopics.getBsm());
           case rxMsg -> routeMessageFrame(consumerRecord, pojoTopics.getRxBsm(), pojoTopics.getBsm());
@@ -119,14 +122,14 @@ public class Asn1DecodedDataRouter {
           default -> routeMessageFrame(consumerRecord, pojoTopics.getBsm());
         }
       }
-      case "TravelerInformation" -> {
+      case "travelerInformation" -> {
         switch (recordType) {
           case dnMsg -> routeMessageFrame(consumerRecord, jsonTopics.getDnMessage(), jsonTopics.getTim());
           case rxMsg -> routeMessageFrame(consumerRecord, jsonTopics.getRxTim(), jsonTopics.getTim());
           default -> routeMessageFrame(consumerRecord, jsonTopics.getTim());
         }
       }
-      case "SPAT" -> {
+      case "signalPhaseAndTimingMessage" -> {
         switch (recordType) {
           case dnMsg -> routeMessageFrame(consumerRecord, jsonTopics.getDnMessage(), jsonTopics.getSpat());
           case rxMsg -> routeMessageFrame(consumerRecord, jsonTopics.getRxSpat(), jsonTopics.getSpat());
@@ -134,20 +137,24 @@ public class Asn1DecodedDataRouter {
           default -> routeMessageFrame(consumerRecord, jsonTopics.getSpat());
         }
       }
-      case "MapData" -> routeMessageFrame(consumerRecord, pojoTopics.getTxMap(), jsonTopics.getMap());
-      case "SignalStatusMessage" -> routeMessageFrame(consumerRecord, pojoTopics.getSsm(), jsonTopics.getSsm());
-      case "SignalRequestMessage" -> routeMessageFrame(consumerRecord, pojoTopics.getTxSrm(), jsonTopics.getSrm());
-      case "PersonalSafetyMessage" -> routeMessageFrame(consumerRecord, pojoTopics.getTxPsm(), jsonTopics.getPsm());
+      case "mapData" -> routeMessageFrame(consumerRecord, pojoTopics.getTxMap(), jsonTopics.getMap());
+      case "signalStatusMessage" -> routeMessageFrame(consumerRecord, pojoTopics.getSsm(), jsonTopics.getSsm());
+      case "signalRequestMessage" -> routeMessageFrame(consumerRecord, pojoTopics.getTxSrm(), jsonTopics.getSrm());
+      case "personalSafetyMessage" -> routeMessageFrame(consumerRecord, pojoTopics.getTxPsm(), jsonTopics.getPsm());
       default -> routeMessageFrame(consumerRecord, "topic.Ode" + messageName + "Json");
     }
   }
 
   private void routeMessageFrame(ConsumerRecord<String, String> consumerRecord, String ... topics)
   throws XmlUtils.XmlUtilsException, IOException {
+    log.debug("routeMessageFrame to topics including: {}", topics[0]);
     OdeMessageFrameData odeMessageFrameData =
         OdeMessageFrameDataCreatorHelper.createOdeMessageFrameData(consumerRecord.value());
+    log.debug("OdeMessageFrameData: {}", odeMessageFrameData);
     String dataStr = JsonUtils.getPlainMapper().writeValueAsString(odeMessageFrameData);
+    log.debug("dataStr: {}", dataStr);
     for (String topic : topics) {
+      log.debug("sending to topic: {}", topic);
       kafkaTemplate.send(topic, consumerRecord.key(), dataStr);
     }
   }
