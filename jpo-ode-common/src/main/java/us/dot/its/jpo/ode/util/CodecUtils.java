@@ -20,8 +20,10 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
+import java.util.Base64;
+import java.util.HexFormat;
 
-import jakarta.xml.bind.DatatypeConverter;
+//import jakarta.xml.bind.DatatypeConverter;
 
 public class CodecUtils {
 
@@ -212,23 +214,28 @@ public class CodecUtils {
    }
 
    public static String toHex(byte[] bytes) {
-      return bytes != null ? DatatypeConverter.printHexBinary(bytes) : "";
+      //return bytes != null ? DatatypeConverter.printHexBinary(bytes) : "";
+      return HexFormat.of().formatHex(bytes);
    }
    
    public static String toHex(byte b) {
-      return DatatypeConverter.printHexBinary(new byte[]{b});
+      return HexFormat.of().formatHex(new byte[] { b });
+      //return DatatypeConverter.printHexBinary(new byte[]{b});
    }
 
    public static byte[] fromHex(String hex) {
-      return DatatypeConverter.parseHexBinary(hex);
+      return HexFormat.of().parseHex(hex);
+      //return DatatypeConverter.parseHexBinary(hex);
    }
 
    public static String toBase64(byte[] bytes) {
-      return bytes != null ? DatatypeConverter.printBase64Binary(bytes) : "";
+      return Base64.getEncoder().encodeToString(bytes);
+      //return bytes != null ? DatatypeConverter.printBase64Binary(bytes) : "";
    }
 
    public static byte[] fromBase64(String base64) {
-      return DatatypeConverter.parseBase64Binary(base64);
+      return Base64.getDecoder().decode(base64);
+      //return DatatypeConverter.parseBase64Binary(base64);
    }
 
    /**
