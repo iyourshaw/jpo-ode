@@ -25,12 +25,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
-import us.dot.its.jpo.ode.model.OdeBsmData;
+import us.dot.its.jpo.ode.model.OdeMessageFrameData;
 
 
 /**
  * The BSMPojoToJSONListener class is a Kafka listener that processes messages containing
- * {@link OdeBsmData} objects. It listens to a specified Kafka topic, converts the received
+ * {@link } objects. It listens to a specified Kafka topic, converts the received
  * messages to JSON format, and publishes the resulting JSON strings to a different Kafka topic.
  */
 @Component
@@ -61,11 +61,11 @@ public class BSMPojoToJSONListener {
 
   /**
    * Listens for Kafka messages of type {@link ConsumerRecord} containing keys of type String
-   * and values of type {@link OdeBsmData}. Converts the value to its JSON representation and
+   * and values of type {@link }. Converts the value to its JSON representation and
    * sends it to a specified Kafka topic.
    *
    * @param consumerRecord            the Kafka message received, containing a key-value pair where
-   *                                    the key is a String and the value is of type {@link OdeBsmData}
+   *                                    the key is a String and the value is of type {@link }
    * @throws JsonProcessingException  if an error occurs during JSON serialization of the value
    */
   @KafkaListener(
@@ -73,7 +73,7 @@ public class BSMPojoToJSONListener {
       topics = "${ode.kafka.topics.pojo.bsm}",
       containerFactory = "odeBsmDataConsumerListenerContainerFactory"
   )
-  public void listen(ConsumerRecord<String, OdeBsmData> consumerRecord) throws JsonProcessingException {
+  public void listen(ConsumerRecord<String, OdeMessageFrameData> consumerRecord) throws JsonProcessingException {
     log.debug("Received record on topic: {} with key: {}", consumerRecord.topic(), consumerRecord.key());
     kafkaTemplate.send(produceTopic, consumerRecord.key(), mapper.writeValueAsString(consumerRecord.value()));
   }

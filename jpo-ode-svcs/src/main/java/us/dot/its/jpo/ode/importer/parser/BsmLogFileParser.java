@@ -21,8 +21,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import us.dot.its.jpo.ode.model.OdeBsmMetadata.BsmSource;
+
 import us.dot.its.jpo.ode.model.OdeLogMetadata;
+import us.dot.its.jpo.ode.model.OdeMessageFrameMetadata.Source;
 
 /**
  * This class is responsible for parsing Basic Safety Message (BSM) log files. It extends
@@ -34,7 +35,7 @@ public class BsmLogFileParser extends LogFileParser {
 
   private static final int DIRECTION_LENGTH = 1;
 
-  private BsmSource bsmSource; // 0 for EV(Tx), 1 for RV(Rx)
+  private Source bsmSource; // 0 for EV(Tx), 1 for RV(Rx)
 
   /**
    * Constructs a new instance of BsmLogFileParser with the specified record type.
@@ -108,22 +109,22 @@ public class BsmLogFileParser extends LogFileParser {
     return status;
   }
 
-  public BsmSource getBsmSource() {
+  public Source getBsmSource() {
     return bsmSource;
   }
 
-  public void setBsmSource(BsmSource bsmSource) {
+  public void setBsmSource(Source bsmSource) {
     this.bsmSource = bsmSource;
   }
 
   protected void setBsmSource(byte[] code) {
     try {
-      setBsmSource(BsmSource.values()[code[0]]);
+      setBsmSource(Source.values()[code[0]]);
 
     } catch (Exception e) {
       logger.error("Invalid BsmSource: {}. Valid values are {}-{} inclusive",
-          code, 0, BsmSource.values());
-      setBsmSource(BsmSource.unknown);
+          code, 0, Source.values());
+      setBsmSource(Source.unknown);
     }
   }
 

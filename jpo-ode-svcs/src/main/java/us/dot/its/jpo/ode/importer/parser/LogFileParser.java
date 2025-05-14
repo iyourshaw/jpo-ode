@@ -23,13 +23,13 @@ import java.math.BigDecimal;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import us.dot.its.jpo.ode.model.OdeBsmMetadata;
-import us.dot.its.jpo.ode.model.OdeBsmMetadata.BsmSource;
+
 import us.dot.its.jpo.ode.model.OdeLogMetadata;
 import us.dot.its.jpo.ode.model.OdeLogMetadata.RecordType;
 import us.dot.its.jpo.ode.model.OdeLogMsgMetadataLocation;
-import us.dot.its.jpo.ode.model.OdeSpatMetadata;
-import us.dot.its.jpo.ode.model.OdeSpatMetadata.SpatSource;
+
+import us.dot.its.jpo.ode.model.OdeMessageFrameMetadata;
+import us.dot.its.jpo.ode.model.OdeMessageFrameMetadata.Source;
 import us.dot.its.jpo.ode.model.ReceivedMessageDetails;
 import us.dot.its.jpo.ode.model.RxSource;
 import us.dot.its.jpo.ode.plugin.j2735.builders.ElevationBuilder;
@@ -155,25 +155,21 @@ public abstract class LogFileParser implements FileParser {
 
     metadata.setReceivedMessageDetails(buildReceivedMessageDetails(this));
 
-    if (metadata instanceof OdeBsmMetadata odeBsmMetadata) {
-      BsmSource bsmSource = BsmSource.unknown;
-      if (this instanceof BsmLogFileParser bsmLogFileParser) {
-        bsmSource = bsmLogFileParser.getBsmSource();
-      } else if (this instanceof RxMsgFileParser rxMsgFileParser && rxMsgFileParser.getRxSource() == RxSource.RV) {
-        bsmSource = BsmSource.RV;
-      }
-
-      odeBsmMetadata.setBsmSource(bsmSource);
-    }
-    if (metadata instanceof OdeSpatMetadata odeSpatMetadata) {
-      SpatSource spatSource = SpatSource.unknown;
+    if (metadata instanceof OdeMessageFrameMetadata messageFrameMetadata) {
+      Source source = Source.unknown;
       boolean isCertPresent = true; /*ieee 1609 (acceptable values 0 = no,1 =yes by default the Cert shall be present)*/
-      if (this instanceof SpatLogFileParser spatLogFileParser) {
-        spatSource = spatLogFileParser.getSpatSource();
+      if (this instanceof BsmLogFileParser bsmLogFileParser) {
+        source = bsmLogFileParser.getBsmSource();
+      } else if (this instanceof RxMsgFileParser rxMsgFileParser && rxMsgFileParser.getRxSource() == RxSource.RV) {
+        source = Source.RV;
+      } else if (this instanceof SpatLogFileParser spatLogFileParser) {
+        source = spatLogFileParser.getSpatSource();
         isCertPresent = spatLogFileParser.isCertPresent(); //update
       }
-      odeSpatMetadata.setSpatSource(spatSource);
-      odeSpatMetadata.setIsCertPresent(isCertPresent);
+
+
+      messageFrameMetadata.setSource(source);
+      messageFrameMetadata.setCertPresent(isCertPresent);
     }
 
     metadata.calculateGeneratedBy();

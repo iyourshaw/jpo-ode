@@ -3,13 +3,17 @@ package us.dot.its.jpo.ode.traveler;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import us.dot.its.jpo.asn.j2735.r2024.MessageFrame.DSRCmsgID;
+import us.dot.its.jpo.asn.j2735.r2024.TravelerInformation.TravelerInformation;
+import us.dot.its.jpo.asn.j2735.r2024.TravelerInformation.TravelerInformationMessageFrame;
 import us.dot.its.jpo.ode.model.Asn1Encoding;
 import us.dot.its.jpo.ode.model.Asn1Encoding.EncodingRule;
 import us.dot.its.jpo.ode.model.OdeAsdPayload;
 import us.dot.its.jpo.ode.model.OdeAsn1Data;
+import us.dot.its.jpo.ode.model.OdeMessageFramePayload;
 import us.dot.its.jpo.ode.model.OdeMsgMetadata;
 import us.dot.its.jpo.ode.model.OdeMsgPayload;
-import us.dot.its.jpo.ode.model.OdeTimPayload;
+
 import us.dot.its.jpo.ode.model.SerialId;
 import us.dot.its.jpo.ode.plugin.RoadSideUnit.RSU;
 import us.dot.its.jpo.ode.plugin.SNMP;
@@ -24,6 +28,7 @@ import us.dot.its.jpo.ode.plugin.j2735.J2735MessageFrame;
 import us.dot.its.jpo.ode.plugin.j2735.builders.GeoRegionBuilder;
 import us.dot.its.jpo.ode.plugin.j2735.builders.TravelerMessageFromHumanToAsnConverter;
 import us.dot.its.jpo.ode.plugin.j2735.timstorage.MessageFrame;
+//import us.dot.its.jpo.ode.plugin.j2735.timstorage.TravelerInformation;
 import us.dot.its.jpo.ode.plugin.j2735.timstorage.TravelerInputData;
 import us.dot.its.jpo.ode.rsu.RsuProperties;
 import us.dot.its.jpo.ode.util.JsonUtils;
@@ -107,7 +112,8 @@ public class TimTransmogrifier {
 
       ObjectNode inOrderTidObj = JsonUtils.toObjectNode(inOrderTid.toJson());
 
-      ObjectNode timObj = (ObjectNode) inOrderTidObj.get("tim");
+
+      TravelerInformation tim = inOrderTid.getTim();
 
       // Create valid payload from scratch
       OdeMsgPayload payload = null;
@@ -116,19 +122,21 @@ public class TimTransmogrifier {
       if (null != asd) {
          ObjectNode asdObj = JsonUtils.toObjectNode(asd.toJson());
          ObjectNode mfBodyObj = (ObjectNode) asdObj.findValue(MESSAGE_FRAME);
-         mfBodyObj.put("messageId", J2735DSRCmsgID.TravelerInformation.getMsgID());
-         mfBodyObj.set("value", (ObjectNode) JsonUtils.newNode().set(TravelerMessageFromHumanToAsnConverter.TRAVELER_INFORMATION, timObj));
+
+         var timMessageFrame = new TravelerInformationMessageFrame();
+         timMessageFrame.setValue(tim);
+         asdObj.set(MESSAGE_FRAME, JsonUtils.getPlainMapper().convertValue(timMessageFrame, JsonNode.class));
+
 
          dataBodyObj.set(ADVISORY_SITUATION_DATA, asdObj);
 
          payload = new OdeAsdPayload(asd);
       } else {
          // Build a MessageFrame
-         ObjectNode mfBodyObj = JsonUtils.newNode();
-         mfBodyObj.put("messageId", J2735DSRCmsgID.TravelerInformation.getMsgID());
-         mfBodyObj.set("value", (ObjectNode) JsonUtils.newNode().set(TravelerMessageFromHumanToAsnConverter.TRAVELER_INFORMATION, timObj));
-         dataBodyObj = (ObjectNode) JsonUtils.newNode().set(MESSAGE_FRAME, mfBodyObj);
-         payload = new OdeTimPayload();
+         var timMessageFrame = new TravelerInformationMessageFrame();
+         timMessageFrame.setValue(tim);
+         dataBodyObj = (ObjectNode) JsonUtils.newNode().set(MESSAGE_FRAME, JsonUtils.getPlainMapper().convertValue(timMessageFrame, JsonNode.class));
+         payload = new OdeMessageFramePayload(timMessageFrame);
          payload.setDataType(MESSAGE_FRAME);
       }
 

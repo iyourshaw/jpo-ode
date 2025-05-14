@@ -15,7 +15,8 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import us.dot.its.jpo.ode.kafka.OdeKafkaProperties;
 import us.dot.its.jpo.ode.kafka.XMLOdeObjectSerializer;
-import us.dot.its.jpo.ode.model.OdeBsmData;
+
+import us.dot.its.jpo.ode.model.OdeMessageFrameData;
 import us.dot.its.jpo.ode.model.OdeObject;
 import us.dot.its.jpo.ode.wrapper.serdes.MessagingSerializer;
 
@@ -171,7 +172,7 @@ public class KafkaProducerConfig {
    *         properties.
    */
   @Bean
-  public ProducerFactory<String, OdeBsmData> odeBsmProducerFactory() {
+  public ProducerFactory<String, OdeMessageFrameData> odeBsmProducerFactory() {
     return new DefaultKafkaProducerFactory<>(buildProducerProperties(),
         new StringSerializer(), new MessagingSerializer<>());
   }
@@ -196,8 +197,8 @@ public class KafkaProducerConfig {
    *         topics and logging.
    */
   @Bean
-  public KafkaTemplate<String, OdeBsmData> odeBsmKafkaTemplate(
-      ProducerFactory<String, OdeBsmData> producerFactory, ObjectMapper objectMapper) {
+  public KafkaTemplate<String, OdeMessageFrameData> odeBsmKafkaTemplate(
+      ProducerFactory<String, OdeMessageFrameData> producerFactory, ObjectMapper objectMapper) {
     var template = new InterceptingKafkaTemplate<>(producerFactory,
         this.odeKafkaProperties.getDisabledTopics(), meterRegistry, objectMapper);
     template.setProducerListener(new LoggingProducerListener<>());

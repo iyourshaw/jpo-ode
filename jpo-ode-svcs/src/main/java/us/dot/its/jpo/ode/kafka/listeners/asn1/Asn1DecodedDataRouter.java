@@ -1,7 +1,6 @@
 package us.dot.its.jpo.ode.kafka.listeners.asn1;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import joptsimple.internal.Strings;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -12,29 +11,21 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
-import us.dot.its.jpo.asn.j2735.r2024.PersonalSafetyMessage.PersonalSafetyMessage;
-import us.dot.its.jpo.ode.coder.OdeBsmDataCreatorHelper;
-import us.dot.its.jpo.ode.coder.OdeMapDataCreatorHelper;
-import us.dot.its.jpo.ode.coder.OdePsmDataCreatorHelper;
-import us.dot.its.jpo.ode.coder.OdeSpatDataCreatorHelper;
-import us.dot.its.jpo.ode.coder.OdeSrmDataCreatorHelper;
-import us.dot.its.jpo.ode.coder.OdeSsmDataCreatorHelper;
-import us.dot.its.jpo.ode.coder.OdeTimDataCreatorHelper;
+import us.dot.its.jpo.asn.j2735.r2024.MessageFrame.DSRCmsgID;
+import us.dot.its.jpo.ode.coder.OdeMessageFrameDataCreatorHelper;
+
 import us.dot.its.jpo.ode.kafka.topics.JsonTopics;
 import us.dot.its.jpo.ode.kafka.topics.PojoTopics;
 import us.dot.its.jpo.ode.model.OdeAsn1Data;
-import us.dot.its.jpo.ode.model.OdeBsmData;
+
 import us.dot.its.jpo.ode.model.OdeLogMetadata;
-import us.dot.its.jpo.ode.model.OdeLogMetadata.RecordType;
+import us.dot.its.jpo.ode.model.OdeMessageFrameData;
 import us.dot.its.jpo.ode.model.OdeMsgMetadata;
 import us.dot.its.jpo.ode.model.OdeMsgPayload;
-import us.dot.its.jpo.ode.model.OdePsmData;
-import us.dot.its.jpo.ode.plugin.j2735.J2735DSRCmsgID;
+
+import us.dot.its.jpo.ode.util.JsonUtils;
 import us.dot.its.jpo.ode.util.XmlUtils;
 import us.dot.its.jpo.ode.util.XmlUtils.XmlUtilsException;
 
@@ -57,7 +48,7 @@ public class Asn1DecodedDataRouter {
   private final PojoTopics pojoTopics;
   private final JsonTopics jsonTopics;
   private final KafkaTemplate<String, String> kafkaTemplate;
-  private final KafkaTemplate<String, OdeBsmData> bsmDataKafkaTemplate;
+  private final KafkaTemplate<String, OdeMessageFrameData> bsmDataKafkaTemplate;
 
   /**
    * Exception for Asn1DecodedDataRouter specific failures.
@@ -74,7 +65,7 @@ public class Asn1DecodedDataRouter {
    * @param kafkaTemplate the KafkaTemplate used for sending messages to Kafka topics.
    */
   public Asn1DecodedDataRouter(KafkaTemplate<String, String> kafkaTemplate,
-                               KafkaTemplate<String, OdeBsmData> bsmDataKafkaTemplate,
+                               KafkaTemplate<String, OdeMessageFrameData> bsmDataKafkaTemplate,
                                PojoTopics pojoTopics,
                                JsonTopics jsonTopics) {
     this.kafkaTemplate = kafkaTemplate;
@@ -107,10 +98,11 @@ public class Asn1DecodedDataRouter {
       );
     }
 
-    J2735DSRCmsgID messageId = J2735DSRCmsgID.valueOf(
-        payloadData.getJSONObject("MessageFrame")
-            .getInt("messageId")
-    );
+    int msgId = payloadData.getJSONObject("MessageFrame")
+        .getInt("messageId");
+    DSRCmsgID messageId = new DSRCmsgID(msgId);
+    String messageName = messageId.name().orElse("Unknown");
+
 
     var metadataJson = XmlUtils.toJSONObject(consumerRecord.value())
         .getJSONObject(OdeAsn1Data.class.getSimpleName())
@@ -118,111 +110,46 @@ public class Asn1DecodedDataRouter {
     OdeLogMetadata.RecordType recordType = OdeLogMetadata.RecordType
         .valueOf(metadataJson.getString("recordType"));
 
-    String streamId;
-    if (Strings.isNullOrEmpty(consumerRecord.key())
-        || "null".equalsIgnoreCase(consumerRecord.key())) {
-      streamId = metadataJson.getJSONObject("serialId").getString("streamId");
-    } else {
-      streamId = consumerRecord.key();
-    }
-
-    switch (messageId) {
-      case BasicSafetyMessage -> routeBSM(consumerRecord, recordType);
-      case TravelerInformation -> routeTIM(consumerRecord, streamId, recordType);
-      case SPATMessage -> routeSPAT(consumerRecord, recordType);
-      case MAPMessage -> routeMAP(consumerRecord, recordType);
-      case SSMMessage -> routeSSM(consumerRecord, recordType);
-      case SRMMessage -> routeSRM(consumerRecord, recordType);
-      case PersonalSafetyMessage -> routePSM(consumerRecord, recordType);
-      case null, default -> log.warn("Unknown message type: {}", messageId);
+    switch (messageName) {
+      case "BasicSafetyMessage" -> {
+        switch (recordType) {
+          case bsmLogDuringEvent -> routeMessageFrame(consumerRecord, pojoTopics.getBsmDuringEvent(), pojoTopics.getBsm());
+          case rxMsg -> routeMessageFrame(consumerRecord, pojoTopics.getRxBsm(), pojoTopics.getBsm());
+          case bsmTx -> routeMessageFrame(consumerRecord, pojoTopics.getTxBsm(), pojoTopics.getBsm());
+          default -> routeMessageFrame(consumerRecord, pojoTopics.getBsm());
+        }
+      }
+      case "TravelerInformation" -> {
+        switch (recordType) {
+          case dnMsg -> routeMessageFrame(consumerRecord, jsonTopics.getDnMessage(), jsonTopics.getTim());
+          case rxMsg -> routeMessageFrame(consumerRecord, jsonTopics.getRxTim(), jsonTopics.getTim());
+          default -> routeMessageFrame(consumerRecord, jsonTopics.getTim());
+        }
+      }
+      case "SPAT" -> {
+        switch (recordType) {
+          case dnMsg -> routeMessageFrame(consumerRecord, jsonTopics.getDnMessage(), jsonTopics.getSpat());
+          case rxMsg -> routeMessageFrame(consumerRecord, jsonTopics.getRxSpat(), jsonTopics.getSpat());
+          case spatTx -> routeMessageFrame(consumerRecord, pojoTopics.getTxSpat(), jsonTopics.getSpat());
+          default -> routeMessageFrame(consumerRecord, jsonTopics.getSpat());
+        }
+      }
+      case "MapData" -> routeMessageFrame(consumerRecord, pojoTopics.getTxMap(), jsonTopics.getMap());
+      case "SignalStatusMessage" -> routeMessageFrame(consumerRecord, pojoTopics.getSsm(), jsonTopics.getSsm());
+      case "SignalRequestMessage" -> routeMessageFrame(consumerRecord, pojoTopics.getTxSrm(), jsonTopics.getSrm());
+      case "PersonalSafetyMessage" -> routeMessageFrame(consumerRecord, pojoTopics.getTxPsm(), jsonTopics.getPsm());
+      default -> routeMessageFrame(consumerRecord, "topic.Ode" + messageName + "Json");
     }
   }
 
-  private void routePSM(ConsumerRecord<String, String> consumerRecord, RecordType recordType)
-      throws XmlUtils.XmlUtilsException, JsonMappingException, JsonProcessingException, IOException {
-    OdePsmData odePsmData = OdePsmDataCreatorHelper.createOdePsmData(consumerRecord.value());
-    if (recordType == RecordType.psmTx) {
-      kafkaTemplate.send(pojoTopics.getTxPsm(), consumerRecord.key(), odePsmData.toString());
+  private void routeMessageFrame(ConsumerRecord<String, String> consumerRecord, String ... topics)
+  throws XmlUtils.XmlUtilsException, IOException {
+    OdeMessageFrameData odeMessageFrameData =
+        OdeMessageFrameDataCreatorHelper.createOdeMessageFrameData(consumerRecord.value());
+    String dataStr = JsonUtils.getPlainMapper().writeValueAsString(odeMessageFrameData);
+    for (String topic : topics) {
+      kafkaTemplate.send(topic, consumerRecord.key(), dataStr);
     }
-    // Send all PSMs also to OdePsmJson
-    kafkaTemplate.send(jsonTopics.getPsm(), consumerRecord.key(), odePsmData.toString());
   }
 
-  private void routeSRM(ConsumerRecord<String, String> consumerRecord, RecordType recordType)
-      throws XmlUtils.XmlUtilsException {
-    String odeSrmData = OdeSrmDataCreatorHelper.createOdeSrmData(consumerRecord.value()).toString();
-    if (recordType == RecordType.srmTx) {
-      kafkaTemplate.send(pojoTopics.getTxSrm(), consumerRecord.key(), odeSrmData);
-    }
-    // Send all SRMs also to OdeSrmJson
-    kafkaTemplate.send(jsonTopics.getSrm(), consumerRecord.key(), odeSrmData);
-  }
-
-  private void routeSSM(ConsumerRecord<String, String> consumerRecord, RecordType recordType)
-      throws XmlUtils.XmlUtilsException {
-    String odeSsmData = OdeSsmDataCreatorHelper.createOdeSsmData(consumerRecord.value()).toString();
-    if (recordType == RecordType.ssmTx) {
-      kafkaTemplate.send(pojoTopics.getSsm(), consumerRecord.key(), odeSsmData);
-    }
-    // Send all SSMs also to OdeSsmJson
-    kafkaTemplate.send(jsonTopics.getSsm(), consumerRecord.key(), odeSsmData);
-  }
-
-  private void routeSPAT(ConsumerRecord<String, String> consumerRecord, RecordType recordType)
-      throws XmlUtils.XmlUtilsException {
-    String odeSpatData =
-        OdeSpatDataCreatorHelper.createOdeSpatData(consumerRecord.value()).toString();
-    switch (recordType) {
-      case dnMsg -> kafkaTemplate.send(
-          jsonTopics.getDnMessage(), consumerRecord.key(), odeSpatData);
-      case rxMsg -> kafkaTemplate.send(jsonTopics.getRxSpat(), consumerRecord.key(), odeSpatData);
-      case spatTx -> kafkaTemplate.send(pojoTopics.getTxSpat(), consumerRecord.key(), odeSpatData);
-      default -> log.trace("Consumed SPAT data with record type: {}", recordType);
-    }
-    // Send all SPATs also to OdeSpatJson
-    kafkaTemplate.send(jsonTopics.getSpat(), consumerRecord.key(), odeSpatData);
-  }
-
-
-  private void routeMAP(ConsumerRecord<String, String> consumerRecord, RecordType recordType)
-      throws XmlUtilsException {
-    String odeMapData = OdeMapDataCreatorHelper.createOdeMapData(consumerRecord.value()).toString();
-    if (recordType == RecordType.mapTx) {
-      kafkaTemplate.send(pojoTopics.getTxMap(), odeMapData);
-    }
-
-    // Send all MAP data to OdeMapJson despite the record type
-    kafkaTemplate.send(jsonTopics.getMap(), odeMapData);
-  }
-
-  private void routeTIM(ConsumerRecord<String, String> consumerRecord,
-                        String streamId,
-                        RecordType type) throws XmlUtilsException {
-    String odeTimData =
-        OdeTimDataCreatorHelper.createOdeTimDataFromDecoded(consumerRecord.value()).toString();
-    switch (type) {
-      case dnMsg -> kafkaTemplate.send(jsonTopics.getDnMessage(), consumerRecord.key(), odeTimData);
-      case rxMsg -> kafkaTemplate.send(jsonTopics.getRxTim(), consumerRecord.key(), odeTimData);
-      default -> log.trace("Consumed TIM data with record type: {}", type);
-    }
-    // Send all TIMs also to OdeTimJson
-    kafkaTemplate.send(jsonTopics.getTim(), streamId, odeTimData);
-  }
-
-  private void routeBSM(ConsumerRecord<String, String> consumerRecord, RecordType recordType)
-      throws XmlUtils.XmlUtilsException {
-    // ODE-518/ODE-604 Demultiplex the messages to appropriate topics based on the "recordType"
-    OdeBsmData odeBsmData = OdeBsmDataCreatorHelper.createOdeBsmData(consumerRecord.value());
-    // NOTE: These three flows in the switch statement are all disabled in all known environments via the disabled-topics configuration settings.
-    // We may consider removing this code completely in the future.
-    switch (recordType) {
-      case bsmLogDuringEvent -> bsmDataKafkaTemplate.send(pojoTopics.getBsmDuringEvent(), consumerRecord.key(),
-          odeBsmData);
-      case rxMsg -> bsmDataKafkaTemplate.send(pojoTopics.getRxBsm(), consumerRecord.key(), odeBsmData);
-      case bsmTx -> bsmDataKafkaTemplate.send(pojoTopics.getTxBsm(), consumerRecord.key(), odeBsmData);
-      default -> log.trace("Consumed BSM data with record type: {}", recordType);
-    }
-    // Send all BSMs also to OdeBsmPojo
-    bsmDataKafkaTemplate.send(pojoTopics.getBsm(), consumerRecord.key(), odeBsmData);
-  }
 }

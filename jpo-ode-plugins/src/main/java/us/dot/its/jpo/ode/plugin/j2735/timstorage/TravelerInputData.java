@@ -27,5 +27,5 @@ public class TravelerInputData extends OdeObject {
    private static final long serialVersionUID = 1L;
    
    private ServiceRequest request;
-   private TravelerInformation tim;
+   private us.dot.its.jpo.asn.j2735.r2024.TravelerInformation.TravelerInformation tim;
 }

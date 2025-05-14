@@ -16,10 +16,15 @@
 
 package us.dot.its.jpo.ode.traveler;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.Year;
 import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoField;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -33,15 +38,22 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import us.dot.its.jpo.ode.coder.OdeTimDataCreatorHelper;
+
+import us.dot.its.jpo.asn.j2735.r2024.TravelerInformation.TravelerDataFrame;
+import us.dot.its.jpo.asn.j2735.r2024.TravelerInformation.TravelerInformation;
+import us.dot.its.jpo.asn.j2735.r2024.TravelerInformation.TravelerInformationMessageFrame;
+import us.dot.its.jpo.ode.coder.OdeMessageFrameDataCreatorHelper;
 import us.dot.its.jpo.ode.kafka.topics.Asn1CoderTopics;
 import us.dot.its.jpo.ode.kafka.topics.JsonTopics;
 import us.dot.its.jpo.ode.kafka.topics.PojoTopics;
+import us.dot.its.jpo.ode.model.OdeMessageFrameData;
+import us.dot.its.jpo.ode.model.OdeMessageFrameMetadata;
+import us.dot.its.jpo.ode.model.OdeMessageFramePayload;
 import us.dot.its.jpo.ode.model.OdeMsgMetadata.GeneratedBy;
 import us.dot.its.jpo.ode.model.OdeMsgPayload;
 import us.dot.its.jpo.ode.model.OdeObject;
 import us.dot.its.jpo.ode.model.OdeRequestMsgMetadata;
-import us.dot.its.jpo.ode.model.OdeTimData;
+
 import us.dot.its.jpo.ode.model.OdeTravelerInputData;
 import us.dot.its.jpo.ode.model.SerialId;
 import us.dot.its.jpo.ode.plugin.ServiceRequest;
@@ -130,6 +142,20 @@ public class TimDepositController {
     }
   }
 
+  private Date getStartDateTime(TravelerDataFrame tdf) {
+    int year = (int)tdf.getStartYear().getValue();
+    int minuteOfYear = (int)tdf.getStartTime().getValue();
+    Instant instant = Instant.from(Year.of(year).plus(minuteOfYear, ChronoUnit.MINUTES));
+    return Date.from(instant);
+  }
+
+  private long getTimestamp(TravelerInformation tim) {
+    int year = Instant.now().get(ChronoField.YEAR);
+    int minuteOfYear = (int)tim.getTimeStamp().getValue();
+    Instant instant = Instant.from(Year.of(year).plus(minuteOfYear, ChronoUnit.MINUTES));
+    return instant.toEpochMilli();
+  }
+
   /**
    * Send a TIM with the appropriate deposit type, ODE.PUT or ODE.POST.
    *
@@ -189,29 +215,30 @@ public class TimDepositController {
               JsonUtils.jsonKeyValue(ERRSTR, errMsg));
     }
 
+
     // Add metadata to message and publish to kafka
-    OdeTravelerInformationMessage tim = odeTID.getTim();
-    OdeMsgPayload timDataPayload = new OdeMsgPayload(tim);
+    TravelerInformation tim = odeTID.getTim();
+    var timMsgFrame = new TravelerInformationMessageFrame();
+    timMsgFrame.setValue(tim);
+    OdeMessageFramePayload timDataPayload = new OdeMessageFramePayload(timMsgFrame);
     OdeRequestMsgMetadata timMetadata = new OdeRequestMsgMetadata(timDataPayload, request);
 
     // set packetID in tim Metadata
-    timMetadata.setOdePacketID(tim.getPacketID());
+    timMetadata.setOdePacketID(tim.getPacketID().getValue());
     // set maxDurationTime in tim Metadata and set latest startDatetime in tim
     // metadata
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-    if (null != tim.getDataframes() && tim.getDataframes().length > 0) {
+    if (null != tim.getDataFrames() && !tim.getDataFrames().isEmpty()) {
       int maxDurationTime = 0;
       Date latestStartDateTime = null;
-      for (DataFrame dataFrameItem : tim.getDataframes()) {
-        maxDurationTime = Math.max(maxDurationTime, dataFrameItem.getDurationTime());
-        try {
-          latestStartDateTime = (latestStartDateTime == null || (latestStartDateTime != null
-              && latestStartDateTime.before(dateFormat.parse(dataFrameItem.getStartDateTime())))
-              ? dateFormat.parse(dataFrameItem.getStartDateTime())
-              : latestStartDateTime);
-        } catch (ParseException e) {
-          log.error("Invalid dateTime parse: ", e);
-        }
+      for (TravelerDataFrame dataFrameItem : tim.getDataFrames()) {
+        maxDurationTime = Math.max(maxDurationTime, (int)dataFrameItem.getDurationTime().getValue());
+
+        latestStartDateTime = (latestStartDateTime == null
+            || (latestStartDateTime.before(getStartDateTime(dataFrameItem)))
+            ? getStartDateTime(dataFrameItem)
+            : latestStartDateTime);
+
       }
       timMetadata.setMaxDurationTime(maxDurationTime);
       timMetadata.setOdeTimStartDateTime(dateFormat.format(latestStartDateTime));
@@ -225,7 +252,7 @@ public class TimDepositController {
     try {
       timMetadata.setRecordGeneratedAt(
           DateTimeUtils.isoDateTime(
-              DateTimeUtils.isoDateTime(tim.getTimeStamp())));
+              DateTimeUtils.isoDateTime(getTimestamp(tim))));
     } catch (DateTimeParseException e) {
       String errMsg = "Invalid timestamp in tim record: " + tim.getTimeStamp();
       log.error(errMsg, e);
@@ -234,7 +261,7 @@ public class TimDepositController {
               JsonUtils.jsonKeyValue(ERRSTR, errMsg));
     }
 
-    OdeTimData odeTimData = new OdeTimData(timMetadata, timDataPayload);
+    OdeMessageFrameData odeTimData = new OdeMessageFrameData(timMetadata, timDataPayload);
     timDataKafkaTemplate.send(pojoTopics.getTimBroadcast(), serialIdJ2735.getStreamId(), odeTimData);
 
     String obfuscatedTimData = TimTransmogrifier.obfuscateRsuPassword(odeTimData.toJson());
@@ -288,10 +315,11 @@ public class TimDepositController {
       log.debug("XML representation: {}", xmlMsg);
 
       // Convert XML into ODE TIM JSON object and obfuscate RSU password
-      OdeTimData odeTimObj = OdeTimDataCreatorHelper.createOdeTimDataFromCreator(
-          xmlMsg, timMetadata);
+      OdeMessageFrameData odeTimObj = OdeMessageFrameDataCreatorHelper.createOdeMessageFrameData(xmlMsg);
+//      OdeTimData odeTimObj = OdeTimDataCreatorHelper.createOdeTimDataFromCreator(
+//          xmlMsg, timMetadata);
 
-      String j2735Tim = odeTimObj.toString();
+      String j2735Tim = JsonUtils.getPlainMapper().writeValueAsString(odeTimObj);
 
       String obfuscatedJ2735Tim = TimTransmogrifier.obfuscateRsuPassword(j2735Tim);
       // publish Broadcast TIM to a J2735 compliant topic.
@@ -305,7 +333,7 @@ public class TimDepositController {
 
       serialIdOde.increment();
       serialIdJ2735.increment();
-    } catch (JsonUtils.JsonUtilsException | XmlUtils.XmlUtilsException e) {
+    } catch (JsonUtils.JsonUtilsException | XmlUtils.XmlUtilsException | JsonProcessingException e) {
       String errMsg = "Error sending data to ASN.1 Encoder module: " + e.getMessage();
       log.error(errMsg, e);
       return ResponseEntity.status(HttpStatus.BAD_REQUEST)

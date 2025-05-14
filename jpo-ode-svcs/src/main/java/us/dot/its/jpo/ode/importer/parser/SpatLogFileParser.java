@@ -6,7 +6,8 @@ import java.io.OutputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import us.dot.its.jpo.ode.model.OdeLogMetadata;
-import us.dot.its.jpo.ode.model.OdeSpatMetadata.SpatSource;
+import us.dot.its.jpo.ode.model.OdeMessageFrameMetadata.Source;
+
 
 /**
  * SpatLogFileParser is responsible for parsing specific SPaT (Signal Phase and Timing)
@@ -34,7 +35,7 @@ public class SpatLogFileParser extends LogFileParser {
   /*ieee 1609 (acceptable values 0 = no,1 =yes by default the Cert shall be present)*/
   private static final int IS_CERT_PRESENT_LENGTH = 1;
 
-  private SpatSource spatSource;
+  private Source spatSource;
   private boolean isCertPresent;
 
   /**
@@ -113,20 +114,20 @@ public class SpatLogFileParser extends LogFileParser {
   }
 
 
-  public SpatSource getSpatSource() {
+  public Source getSpatSource() {
     return spatSource;
   }
 
-  public void setSpatSource(SpatSource spatSource) {
+  public void setSpatSource(Source spatSource) {
     this.spatSource = spatSource;
   }
 
   protected void setSpatSource(byte[] code) {
     try {
-      setSpatSource(SpatSource.values()[code[0]]);
+      setSpatSource(Source.values()[code[0]]);
     } catch (Exception e) {
-      logger.error("Invalid SpatSource: {}. Valid values are {}-{} inclusive", code, 0, SpatSource.values());
-      setSpatSource(SpatSource.unknown);
+      logger.error("Invalid SpatSource: {}. Valid values are {}-{} inclusive", code, 0, Source.values());
+      setSpatSource(Source.unknown);
     }
   }
 
@@ -142,8 +143,8 @@ public class SpatLogFileParser extends LogFileParser {
     try {
       setCertPresent(code[0] != 0);
     } catch (Exception e) {
-      logger.error("Invalid Certificate Presence indicator: {}. Valid values are {}-{} inclusive", code, 0, SpatSource.values());
-      setSpatSource(SpatSource.unknown);
+      logger.error("Invalid Certificate Presence indicator: {}. Valid values are {}-{} inclusive", code, 0, Source.values());
+      setSpatSource(Source.unknown);
     }
   }
 

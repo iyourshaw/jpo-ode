@@ -18,6 +18,7 @@ package us.dot.its.jpo.ode.model;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import us.dot.its.jpo.asn.j2735.r2024.TravelerInformation.TravelerInformation;
 import us.dot.its.jpo.ode.plugin.ServiceRequest;
 import us.dot.its.jpo.ode.plugin.j2735.OdeTravelerInformationMessage;
 
@@ -26,5 +27,5 @@ import us.dot.its.jpo.ode.plugin.j2735.OdeTravelerInformationMessage;
 public class OdeTravelerInputData extends OdeObject {
   private static final long serialVersionUID = 8769107278440796699L;
   private ServiceRequest request;
-  private OdeTravelerInformationMessage tim;
+  private TravelerInformation tim;
 }

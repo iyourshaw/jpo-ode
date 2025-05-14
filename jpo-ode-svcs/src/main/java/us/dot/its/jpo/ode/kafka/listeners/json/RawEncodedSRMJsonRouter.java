@@ -6,8 +6,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
+import us.dot.its.jpo.ode.model.OdeMessageFrameMetadata;
 import us.dot.its.jpo.ode.model.OdeObject;
-import us.dot.its.jpo.ode.model.OdeSrmMetadata;
+
 import us.dot.its.jpo.ode.uper.StartFlagNotFoundException;
 import us.dot.its.jpo.ode.uper.SupportedMessageType;
 
@@ -53,7 +54,7 @@ public class RawEncodedSRMJsonRouter {
   public void listen(ConsumerRecord<String, String> consumerRecord)
       throws JsonProcessingException, StartFlagNotFoundException {
     var messageToPublish = rawEncodedJsonService.addEncodingAndMutateBytes(consumerRecord.value(),
-        SupportedMessageType.SRM, OdeSrmMetadata.class);
+        SupportedMessageType.SRM, OdeMessageFrameMetadata.class);
     kafkaTemplate.send(publishTopic, consumerRecord.key(), messageToPublish);
   }
 }
