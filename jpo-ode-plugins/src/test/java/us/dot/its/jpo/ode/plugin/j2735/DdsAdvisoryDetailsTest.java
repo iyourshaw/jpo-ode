@@ -20,6 +20,7 @@ import static org.junit.Assert.*;
 import org.junit.jupiter.api.Test;
 
 import mockit.Tested;
+import us.dot.its.jpo.asn.j2735.r2024.Common.DFullTime;
 import us.dot.its.jpo.ode.plugin.ieee1609dot2.Ieee1609Dot2DataTag;
 import us.dot.its.jpo.ode.plugin.j2735.DdsAdvisoryDetails.AdvisoryBroadcastType;
 import us.dot.its.jpo.ode.util.CodecUtils;
@@ -34,8 +35,8 @@ public class DdsAdvisoryDetailsTest {
       testDdsAdvisoryDetails.setAsdmID("testAsdmID");
       testDdsAdvisoryDetails.setAsdmType(1);
       testDdsAdvisoryDetails.setDistType(CodecUtils.toHex(DdsAdvisorySituationData.IP));
-      testDdsAdvisoryDetails.setStartTime(new J2735DFullTime());
-      testDdsAdvisoryDetails.setStopTime(new J2735DFullTime());
+      testDdsAdvisoryDetails.setStartTime(new DFullTime());
+      testDdsAdvisoryDetails.setStopTime(new DFullTime());
       testDdsAdvisoryDetails.setAdvisoryMessageBytes("testAdvisoryMessageBytes");
       testDdsAdvisoryDetails.setAdvisoryMessage(new Ieee1609Dot2DataTag());
       
@@ -52,12 +53,12 @@ public class DdsAdvisoryDetailsTest {
    public void testHashCodeAndEquals() {
       String distType = CodecUtils.toHex(DdsAdvisorySituationData.RSU);
       
-      DdsAdvisoryDetails ddsad1 = new DdsAdvisoryDetails("asdmID", AdvisoryBroadcastType.tim, distType, new J2735DFullTime(),
-            new J2735DFullTime(), new Ieee1609Dot2DataTag());
-      DdsAdvisoryDetails ddsad2 = new DdsAdvisoryDetails("asdmID", AdvisoryBroadcastType.tim, distType, new J2735DFullTime(),
-            new J2735DFullTime(), new Ieee1609Dot2DataTag());
-      DdsAdvisoryDetails ddsad3 = new DdsAdvisoryDetails("asdmID", AdvisoryBroadcastType.map, distType, new J2735DFullTime(),
-            new J2735DFullTime(), new Ieee1609Dot2DataTag());
+      DdsAdvisoryDetails ddsad1 = new DdsAdvisoryDetails("asdmID", AdvisoryBroadcastType.tim, distType, new DFullTime(),
+            new DFullTime(), new Ieee1609Dot2DataTag());
+      DdsAdvisoryDetails ddsad2 = new DdsAdvisoryDetails("asdmID", AdvisoryBroadcastType.tim, distType, new DFullTime(),
+            new DFullTime(), new Ieee1609Dot2DataTag());
+      DdsAdvisoryDetails ddsad3 = new DdsAdvisoryDetails("asdmID", AdvisoryBroadcastType.map, distType, new DFullTime(),
+            new DFullTime(), new Ieee1609Dot2DataTag());
 
       assertEquals("Expected identical hashcodes", ddsad1.hashCode(), ddsad2.hashCode());
       assertNotEquals("Expected different hashcodes", ddsad2.hashCode(), ddsad3.hashCode());

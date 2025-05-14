@@ -19,6 +19,12 @@ import java.text.ParseException;
 import java.time.ZonedDateTime;
 import java.util.Random;
 
+import us.dot.its.jpo.asn.j2735.r2024.Common.DDay;
+import us.dot.its.jpo.asn.j2735.r2024.Common.DFullTime;
+import us.dot.its.jpo.asn.j2735.r2024.Common.DHour;
+import us.dot.its.jpo.asn.j2735.r2024.Common.DMinute;
+import us.dot.its.jpo.asn.j2735.r2024.Common.DMonth;
+import us.dot.its.jpo.asn.j2735.r2024.Common.DYear;
 import us.dot.its.jpo.ode.plugin.SituationDataWarehouse;
 import us.dot.its.jpo.ode.plugin.asn1.Asn1Object;
 import us.dot.its.jpo.ode.plugin.ieee1609dot2.Ieee1609Dot2DataTag;
@@ -53,24 +59,24 @@ public class DdsAdvisorySituationData extends Asn1Object {
       groupID = CodecUtils.toHex(gid);
    }
 
-   public J2735DFullTime dFullTimeFromIsoTimeString(String isoTime) throws ParseException {
+   public DFullTime dFullTimeFromIsoTimeString(String isoTime) throws ParseException {
 
-      J2735DFullTime dStartTime = new J2735DFullTime();
+      DFullTime dStartTime = new DFullTime();
       
       // use time if present, if not use undefined flag values
       if (null != isoTime) {
          ZonedDateTime zdtTime = DateTimeUtils.isoDateTime(isoTime);
-         dStartTime.setYear(zdtTime.getYear());
-         dStartTime.setMonth(zdtTime.getMonthValue());
-         dStartTime.setDay(zdtTime.getDayOfMonth());
-         dStartTime.setHour(zdtTime.getHour());
-         dStartTime.setMinute(zdtTime.getMinute());
+         dStartTime.setYear(new DYear(zdtTime.getYear()));
+         dStartTime.setMonth(new DMonth(zdtTime.getMonthValue()));
+         dStartTime.setDay(new DDay(zdtTime.getDayOfMonth()));
+         dStartTime.setHour(new DHour(zdtTime.getHour()));
+         dStartTime.setMinute(new DMinute(zdtTime.getMinute()));
       } else {
-         dStartTime.setYear(0);
-         dStartTime.setMonth(0);
-         dStartTime.setDay(0);
-         dStartTime.setHour(31);
-         dStartTime.setMinute(60);
+         dStartTime.setYear(new DYear(0));
+         dStartTime.setMonth(new DMonth(0));
+         dStartTime.setDay(new DDay(0));
+         dStartTime.setHour(new DHour(31));
+         dStartTime.setMinute(new DMinute(60));
       }
       return dStartTime;
    }
@@ -165,9 +171,9 @@ public class DdsAdvisorySituationData extends Asn1Object {
    }
 
    public DdsAdvisorySituationData setAsdmDetails(String startTime, String stopTime, byte distroType, Ieee1609Dot2DataTag advisoryMessage) throws ParseException {
-     J2735DFullTime dStartTime = dFullTimeFromIsoTimeString(startTime);
+     DFullTime dStartTime = dFullTimeFromIsoTimeString(startTime);
 
-     J2735DFullTime dStopTime = dFullTimeFromIsoTimeString(stopTime);
+     DFullTime dStopTime = dFullTimeFromIsoTimeString(stopTime);
      String stringDistroType = CodecUtils.toHex(distroType);
 
      byte[] fourRandomBytes = new byte[4];

@@ -15,14 +15,15 @@
  ******************************************************************************/
 package us.dot.its.jpo.ode.plugin.ieee1609dot2;
 
+import us.dot.its.jpo.asn.j2735.r2024.MessageFrame.MessageFrame;
 import us.dot.its.jpo.ode.plugin.asn1.Asn1Object;
-import us.dot.its.jpo.ode.plugin.j2735.timstorage.MessageFrame;
+
 
 public class Ieee1609Dot2Content extends Asn1Object {
    private static final long serialVersionUID = 8613093241018229620L;
 
    
-   private MessageFrame unsecuredData; 
+   private MessageFrame unsecuredData;
    private String unsecuredDataBytes; 
    private SignedData signedData;
    private EncryptedData encryptedData;

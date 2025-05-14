@@ -15,6 +15,7 @@
  ******************************************************************************/
 package us.dot.its.jpo.ode.plugin.j2735;
 
+import us.dot.its.jpo.asn.j2735.r2024.Common.DFullTime;
 import us.dot.its.jpo.ode.plugin.asn1.Asn1Object;
 import us.dot.its.jpo.ode.plugin.ieee1609dot2.Ieee1609Dot2DataTag;
 
@@ -31,8 +32,8 @@ public class DdsAdvisoryDetails extends Asn1Object {
    String asdmID;                   //         DSRC.TemporaryID,
    int asdmType;                    //    AdvisoryBroadcastType,
    String distType;                    //0, 1 or 2    ,
-   J2735DFullTime startTime;        //OPTIONAL,
-   J2735DFullTime stopTime;         //OPTIONAL,
+   DFullTime startTime;        //OPTIONAL,
+   DFullTime stopTime;         //OPTIONAL,
    String advisoryMessageBytes;          //  OCTET STRING (SIZE(0..1400))  -- Encoded advisory message
    Ieee1609Dot2DataTag advisoryMessage;
 
@@ -46,8 +47,8 @@ public class DdsAdvisoryDetails extends Asn1Object {
       return asdmID;
    }
    
-   public DdsAdvisoryDetails(String asdmID, AdvisoryBroadcastType asdmType, String distType, J2735DFullTime startTime,
-         J2735DFullTime stopTime, Ieee1609Dot2DataTag advisoryMessage2) {
+   public DdsAdvisoryDetails(String asdmID, AdvisoryBroadcastType asdmType, String distType, DFullTime startTime,
+         DFullTime stopTime, Ieee1609Dot2DataTag advisoryMessage2) {
       super();
       this.asdmID = asdmID;
       this.asdmType = asdmType.ordinal();
@@ -72,16 +73,16 @@ public class DdsAdvisoryDetails extends Asn1Object {
    public void setDistType(String distType) {
       this.distType = distType;
    }
-   public J2735DFullTime getStartTime() {
+   public DFullTime getStartTime() {
       return startTime;
    }
-   public void setStartTime(J2735DFullTime startTime) {
+   public void setStartTime(DFullTime startTime) {
       this.startTime = startTime;
    }
-   public J2735DFullTime getStopTime() {
+   public DFullTime getStopTime() {
       return stopTime;
    }
-   public void setStopTime(J2735DFullTime stopTime) {
+   public void setStopTime(DFullTime stopTime) {
       this.stopTime = stopTime;
    }
    public String getAdvisoryMessageBytes() {

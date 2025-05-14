@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import us.dot.its.jpo.asn.j2735.r2024.MessageFrame.DSRCmsgID;
+import us.dot.its.jpo.asn.j2735.r2024.MessageFrame.MessageFrame;
 import us.dot.its.jpo.asn.j2735.r2024.TravelerInformation.TravelerInformation;
 import us.dot.its.jpo.asn.j2735.r2024.TravelerInformation.TravelerInformationMessageFrame;
 import us.dot.its.jpo.ode.model.Asn1Encoding;
@@ -23,12 +24,10 @@ import us.dot.its.jpo.ode.plugin.ieee1609dot2.Ieee1609Dot2Content;
 import us.dot.its.jpo.ode.plugin.ieee1609dot2.Ieee1609Dot2Data;
 import us.dot.its.jpo.ode.plugin.ieee1609dot2.Ieee1609Dot2DataTag;
 import us.dot.its.jpo.ode.plugin.j2735.DdsAdvisorySituationData;
-import us.dot.its.jpo.ode.plugin.j2735.J2735DSRCmsgID;
-import us.dot.its.jpo.ode.plugin.j2735.J2735MessageFrame;
+
+//import us.dot.its.jpo.ode.plugin.j2735.timstorage.TravelerInformation;
 import us.dot.its.jpo.ode.plugin.j2735.builders.GeoRegionBuilder;
 import us.dot.its.jpo.ode.plugin.j2735.builders.TravelerMessageFromHumanToAsnConverter;
-import us.dot.its.jpo.ode.plugin.j2735.timstorage.MessageFrame;
-//import us.dot.its.jpo.ode.plugin.j2735.timstorage.TravelerInformation;
 import us.dot.its.jpo.ode.plugin.j2735.timstorage.TravelerInputData;
 import us.dot.its.jpo.ode.rsu.RsuProperties;
 import us.dot.its.jpo.ode.util.JsonUtils;
@@ -66,10 +65,10 @@ public class TimTransmogrifier {
       Ieee1609Dot2DataTag ieeeDataTag = new Ieee1609Dot2DataTag();
       Ieee1609Dot2Data ieee = new Ieee1609Dot2Data();
       Ieee1609Dot2Content ieeeContent = new Ieee1609Dot2Content();
-      J2735MessageFrame j2735Mf = new J2735MessageFrame();
-      MessageFrame mf = new MessageFrame();
-      mf.setMessageFrame(j2735Mf);
-      ieeeContent.setUnsecuredData(mf);
+      //J2735MessageFrame j2735Mf = new J2735MessageFrame();
+//      MessageFrame mf = new MessageFrame();
+//      mf.setMessageFrame(mf);
+//      ieeeContent.setUnsecuredData(mf);
       ieee.setContent(ieeeContent);
       ieeeDataTag.setIeee1609Dot2Data(ieee);
 

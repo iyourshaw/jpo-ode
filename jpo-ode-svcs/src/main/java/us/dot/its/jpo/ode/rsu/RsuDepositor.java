@@ -28,6 +28,7 @@ import us.dot.its.jpo.ode.plugin.ServiceRequest;
 import us.dot.its.jpo.ode.snmp.SnmpSession;
 import us.dot.its.jpo.ode.traveler.TimTransmogrifier;
 
+
 /**
  * The RsuDepositor class represents a thread that is responsible for depositing TIM messages to a
  * set of RSUs (Roadside Units). The deposits are performed via SNMP and are processed in a
